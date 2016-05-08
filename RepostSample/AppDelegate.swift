@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import OAuthSwift
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,6 +17,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
   func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
     // Override point for customization after application launch.
+//    let viewController: ViewController = ViewController()
+//    let naviController: UINavigationController = UINavigationController(rootViewController: viewController)
+//    self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
+//    self.window!.rootViewController = naviController
+//    self.window!.makeKeyAndVisible()
+    return true
+  }
+  
+  func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
+    applicationHandleOpenURL(url)
+    return true
+  }
+  
+  @available(iOS 9.0, *)
+  func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
+    applicationHandleOpenURL(url)
     return true
   }
 
@@ -41,6 +58,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
   }
 
+}
 
+
+extension AppDelegate {
+  
+    func applicationHandleOpenURL(url: NSURL) {
+        if (url.host == "oauth-callback") {
+            OAuthSwift.handleOpenURL(url)
+        } else {
+            OAuthSwift.handleOpenURL(url)
+        }
+    }
+  
 }
 

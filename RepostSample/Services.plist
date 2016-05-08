@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<!--
-   Services.plist
-   RepostSample
-
-   Created by Jason Lemrond on 5/8/16.
-   Copyright (c) 2016 Jason Lemrond. All rights reserved.
--->
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-    <dict>
-    
-    </dict>
+<dict>
+	<key>Instagram</key>
+	<dict>
+		<key>consumerKey</key>
+		<string>890d1f2505fb43ceb4b99a4218160d5e</string>
+		<key>consumerSecret</key>
+		<string>7dbb022db330480a8704aa8357b8c3d1</string>
+	</dict>
+</dict>
 </plist>
