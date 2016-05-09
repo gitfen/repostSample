@@ -45,6 +45,7 @@ extension WebViewController: UIWebViewDelegate {
     
     func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
         if let url = request.URL where (url.scheme == "repostSample") {
+            print("dismiss")
             dismissWebViewController()
         }
         return true

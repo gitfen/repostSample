@@ -31,10 +31,44 @@
                             <constraint firstItem="CXc-bf-Eie" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="zAC-E7-bBJ"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <segue destination="z6C-Cs-mBA" kind="presentation" identifier="instagram" id="P4b-Oo-biG"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="215" y="418"/>
+        </scene>
+        <!--Instagram View Controller-->
+        <scene sceneID="m1Z-QY-LLf">
+            <objects>
+                <viewController storyboardIdentifier="InstagramViewController" id="z6C-Cs-mBA" customClass="InstagramViewController" customModule="RepostSample" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="XgE-kz-SvQ"/>
+                        <viewControllerLayoutGuide type="bottom" id="xTX-O6-jQu"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="QLe-Ye-sQO">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZFd-t9-NQl">
+                                <rect key="frame" x="266" y="285" width="69" height="30"/>
+                                <state key="normal" title="Print Data"/>
+                                <connections>
+                                    <action selector="printData:" destination="z6C-Cs-mBA" eventType="touchUpInside" id="GFX-jt-wTr"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="ZFd-t9-NQl" firstAttribute="centerY" secondItem="QLe-Ye-sQO" secondAttribute="centerY" id="s6Y-UV-OBD"/>
+                            <constraint firstItem="ZFd-t9-NQl" firstAttribute="centerX" secondItem="QLe-Ye-sQO" secondAttribute="centerX" id="uUe-B2-q8t"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="AZ6-w5-BS3" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="868" y="426"/>
         </scene>
     </scenes>
 </document>

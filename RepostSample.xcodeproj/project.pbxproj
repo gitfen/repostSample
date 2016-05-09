@@ -19,6 +19,8 @@
 		849906801CDFBB7000085F72 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8499067E1CDFB8C500085F72 /* WebViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		849906821CDFBD9C00085F72 /* Services.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849906811CDFBD9C00085F72 /* Services.swift */; settings = {ASSET_TAGS = (); }; };
 		849906841CDFE64300085F72 /* Services.plist in Resources */ = {isa = PBXBuildFile; fileRef = 849906831CDFE64300085F72 /* Services.plist */; settings = {ASSET_TAGS = (); }; };
+		849906861CE00CF200085F72 /* InstagramViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849906851CE00CF200085F72 /* InstagramViewController.swift */; settings = {ASSET_TAGS = (); }; };
+		849906881CE01BC100085F72 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849906871CE01BC100085F72 /* Model.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +72,8 @@
 		8499067E1CDFB8C500085F72 /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		849906811CDFBD9C00085F72 /* Services.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Services.swift; sourceTree = "<group>"; };
 		849906831CDFE64300085F72 /* Services.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Services.plist; sourceTree = "<group>"; };
+		849906851CE00CF200085F72 /* InstagramViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstagramViewController.swift; sourceTree = "<group>"; };
+		849906871CE01BC100085F72 /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +128,8 @@
 			children = (
 				8499064A1CDFB34400085F72 /* AppDelegate.swift */,
 				8499064C1CDFB34400085F72 /* ViewController.swift */,
+				849906851CE00CF200085F72 /* InstagramViewController.swift */,
+				849906871CE01BC100085F72 /* Model.swift */,
 				8499067E1CDFB8C500085F72 /* WebViewController.swift */,
 				8499064E1CDFB34400085F72 /* Main.storyboard */,
 				849906511CDFB34400085F72 /* Assets.xcassets */,
@@ -291,7 +297,9 @@
 				8499064D1CDFB34400085F72 /* ViewController.swift in Sources */,
 				849906821CDFBD9C00085F72 /* Services.swift in Sources */,
 				849906801CDFBB7000085F72 /* WebViewController.swift in Sources */,
+				849906881CE01BC100085F72 /* Model.swift in Sources */,
 				8499064B1CDFB34400085F72 /* AppDelegate.swift in Sources */,
+				849906861CE00CF200085F72 /* InstagramViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -22,6 +22,11 @@ let Instagram =
 
 class ViewController: UIViewController {
     
+    let stuff = "Things"
+    if (userInfo != nil) {
+        userInfo = Model?
+    }
+    
     
     // *****************************
     //   MARK: Instagram Methods
@@ -60,7 +65,6 @@ class ViewController: UIViewController {
         let state: String = generateStateWithLength(20) as String
         oauth.authorize_url_handler = getURLHandler()
         oauth.authorizeWithCallbackURL(NSURL(string: "repostSample://oauth-callback/instagram")!, scope: "likes+comments", state: state, success: { (credential, response, parameters) -> Void in
-            self.showTokenAlert(serviceParameter["name"], credential: credential)
             self.testInstagram(oauth)
             }, failure: { (error) -> Void in
                 print(error.localizedDescription)
@@ -70,17 +74,23 @@ class ViewController: UIViewController {
     
     // This is only a test.  You will need to use this info to log them in and view their information.
     func testInstagram(oauth: OAuth2Swift) {
+        
         let url: String = "https://api.instagram.com/v1/users/706215427/?access_token=\(oauth.client.credential.oauth_token)"
         let parameters: Dictionary = [String: AnyObject]()
         oauth.client.get(url, parameters: parameters,
             success: {
                 (data, response) -> Void in
                 let jsonDict: AnyObject! = try? NSJSONSerialization.JSONObjectWithData(data, options: [])
+                // self.userInfo = Model(name: "Instagram2", data: jsonDict)
                 print(jsonDict)
-            
+                print(self.userInfo.name)
             }, failure: { (error) -> Void in
                 print(error)
         })
+    }
+    
+    func updateModel(model: Model?) {
+        userInfo = Model(name: "Woot", data: 3)
     }
     
     
@@ -98,6 +108,8 @@ class ViewController: UIViewController {
         initConfig()
         
         getURLHandler()
+        
+        updateModel(nil)
         
         let label = UILabel()
         label.text = "THINGS"
@@ -165,6 +177,7 @@ class ViewController: UIViewController {
     
     func showTokenAlert(name: String?, credential: OAuthSwiftCredential) {
         var message = "oauth_token:\(credential.oauth_token)"
+        print(credential)
         if !credential.oauth_token_secret.isEmpty {
             message += "\n\noauth_token_secret:\(credential.oauth_token_secret)"
         }
@@ -185,36 +198,5 @@ class ViewController: UIViewController {
         return url_handler
     }
 
-}
-
-extension ViewController: UITableViewDelegate, UITableViewDataSource {
-    // MARK: UITableViewDataSource
-    
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return services.keys.count
-    }
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath:NSIndexPath) -> UITableViewCell {
-        let cell: UITableViewCell = UITableViewCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "Cell")
-        let service = services.keys[indexPath.row]
-        cell.textLabel?.text = service
-        
-        if let parameters = services[service] where Services.parametersEmpty(parameters) {
-            cell.textLabel?.textColor = UIColor.redColor()
-        }
-        if let parameters = services[service], authentified = parameters["authentified"] where authentified == "1" {
-            cell.textLabel?.textColor = UIColor.greenColor()
-        }
-        print("Test")
-        return cell
-    }
-    
-    // MARK: UITableViewDelegate
-    
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath:NSIndexPath) {
-        let service: String = services.keys[indexPath.row]
-        
-        doAuthService(service)
-        tableView.deselectRowAtIndexPath(indexPath, animated:true)
-    }
 }
 
