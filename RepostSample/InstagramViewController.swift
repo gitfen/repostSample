@@ -13,23 +13,23 @@ class InstagramViewController: UIViewController {
     
     override func viewDidLoad() {
         print("Instagram View Loaded")
-//        let loginViewController: ViewController = ViewController()
-//        let userInfo = loginViewController.userInfo
-//        guard let data = userInfo?.data else {
-//            return
-//        }
-//        
-//        print(data)
+        print(Model.data)
+        
+        getData()
+    }
+    
+    func getData() {
+        if (Model.data != nil) {
+            getData()
+        }
+        
+        print(Model.data)
     }
     
     
     @IBAction func printData(sender: UIButton) {
         
-        let loginViewController: ViewController = ViewController()
-        let userInfo = loginViewController.userInfo
-        let data = userInfo.name
-        
-        print(data)
+        print(Model.data)
         
     }
     

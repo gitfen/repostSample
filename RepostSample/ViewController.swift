@@ -22,10 +22,7 @@ let Instagram =
 
 class ViewController: UIViewController {
     
-    let stuff = "Things"
-    if (userInfo != nil) {
-        userInfo = Model?
-    }
+    var stuff = "Things"
     
     
     // *****************************
@@ -82,16 +79,14 @@ class ViewController: UIViewController {
                 (data, response) -> Void in
                 let jsonDict: AnyObject! = try? NSJSONSerialization.JSONObjectWithData(data, options: [])
                 // self.userInfo = Model(name: "Instagram2", data: jsonDict)
+                print(Model.data)
+                Model.data = jsonDict
                 print(jsonDict)
-                print(self.userInfo.name)
             }, failure: { (error) -> Void in
                 print(error)
         })
     }
     
-    func updateModel(model: Model?) {
-        userInfo = Model(name: "Woot", data: 3)
-    }
     
     
     // **************************************
@@ -108,8 +103,6 @@ class ViewController: UIViewController {
         initConfig()
         
         getURLHandler()
-        
-        updateModel(nil)
         
         let label = UILabel()
         label.text = "THINGS"

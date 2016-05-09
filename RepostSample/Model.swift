@@ -8,14 +8,18 @@
 
 import Foundation
 
-struct Model {
+class Model {
     
-    var name: String
-    var data: AnyObject
+    static var data: AnyObject?
+    //static let sharedInstance = Model()
     
-    init(name: String, data: AnyObject) {
-        self.name = name
-        self.data = data
+    func isEmpty() -> Bool {
+        if (Model.data != nil) {
+            return true
+        } else {
+            return false
+        }
     }
+    
     
 }
