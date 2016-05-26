@@ -11,6 +11,7 @@ import Foundation
 class Model {
     
     static var data: AnyObject?
+    static var accessToken: String?
     //static let sharedInstance = Model()
     
     func isEmpty() -> Bool {

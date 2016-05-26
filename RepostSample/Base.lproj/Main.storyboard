@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -58,13 +58,26 @@
                                     <action selector="printData:" destination="z6C-Cs-mBA" eventType="touchUpInside" id="GFX-jt-wTr"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UGD-8M-bmb">
+                                <rect key="frame" x="221" y="285" width="159" height="30"/>
+                                <state key="normal" title="Get ABL Instagram Info"/>
+                                <connections>
+                                    <action selector="showImages:" destination="z6C-Cs-mBA" eventType="touchUpInside" id="1dp-jv-97k"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="UGD-8M-bmb" firstAttribute="centerX" secondItem="QLe-Ye-sQO" secondAttribute="centerX" id="fik-sn-Ppz"/>
+                            <constraint firstItem="UGD-8M-bmb" firstAttribute="centerY" secondItem="QLe-Ye-sQO" secondAttribute="centerY" id="gyo-Kz-zRv"/>
                             <constraint firstItem="ZFd-t9-NQl" firstAttribute="centerY" secondItem="QLe-Ye-sQO" secondAttribute="centerY" id="s6Y-UV-OBD"/>
                             <constraint firstItem="ZFd-t9-NQl" firstAttribute="centerX" secondItem="QLe-Ye-sQO" secondAttribute="centerX" id="uUe-B2-q8t"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="instagramButton" destination="UGD-8M-bmb" id="5dd-Tx-fK9"/>
+                        <outlet property="printButton" destination="ZFd-t9-NQl" id="SX3-27-yd0"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AZ6-w5-BS3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

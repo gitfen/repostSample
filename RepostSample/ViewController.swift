@@ -22,8 +22,6 @@ let Instagram =
 
 class ViewController: UIViewController {
     
-    var stuff = "Things"
-    
     
     // *****************************
     //   MARK: Instagram Methods
@@ -81,6 +79,7 @@ class ViewController: UIViewController {
                 // self.userInfo = Model(name: "Instagram2", data: jsonDict)
                 print(Model.data)
                 Model.data = jsonDict
+                Model.accessToken = oauth.client.credential.oauth_token
                 print(jsonDict)
             }, failure: { (error) -> Void in
                 print(error)
