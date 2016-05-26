@@ -59,7 +59,7 @@ class ViewController: UIViewController {
         
         let state: String = generateStateWithLength(20) as String
         oauth.authorize_url_handler = getURLHandler()
-        oauth.authorizeWithCallbackURL(NSURL(string: "repostSample://oauth-callback/instagram")!, scope: "likes+comments", state: state, success: { (credential, response, parameters) -> Void in
+        oauth.authorizeWithCallbackURL(NSURL(string: "repostSample://oauth-callback/instagram")!, scope: "likes+comments+public_content", state: state, success: { (credential, response, parameters) -> Void in
             self.testInstagram(oauth)
             }, failure: { (error) -> Void in
                 print(error.localizedDescription)

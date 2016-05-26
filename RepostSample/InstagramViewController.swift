@@ -14,6 +14,8 @@ class InstagramViewController: UIViewController {
     @IBOutlet weak var printButton: UIButton!
     @IBOutlet weak var instagramButton: UIButton!
     
+    let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 200, height: 200))
+    
     override func viewDidLoad() {
         print("Instagram View Loaded")
         print(Model.data)
@@ -21,6 +23,25 @@ class InstagramViewController: UIViewController {
         instagramButton.hidden = true
         
         getData()
+        
+        view.addSubview(imageView)
+        
+        // Example on how to display images.  Need to get 'addSubview' on the Main thread.
+        
+//        let imageURL = NSURL(string: "https://scontent.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/13108620_160355351030656_1854262967_n.jpg?ig_cache_key=MTIzNzM4OTc3Mjk1NjU1MjUzNg%3D%3D.2")
+//        let imgRequest = NSURLRequest(URL: imageURL!)
+//        let imgSession = NSURLSession.sharedSession()
+//        let imgTask = imgSession.dataTaskWithRequest(imgRequest) {
+//            (data, response, error) -> Void in
+//            
+//            let image = UIImage(data: data!)
+//            self.imageView.image = image
+//
+//            self.view.addSubview(self.imageView)
+//            
+//        }
+//        
+//        imgTask.resume()
     }
     
     func getData() {
@@ -55,10 +76,8 @@ class InstagramViewController: UIViewController {
         print("getInstagramImages called. User \(userId)")
         
         let accessToken = getAccessToken()
-        
-        print("https://api.instagram.com/v1/users/195305144/media/recent?access_token=\(accessToken)&count=5&callback=?")
     
-        guard let requestURL = NSURL(string: "https://api.instagram.com/v1/users/195305144/media/recent?access_token=\(accessToken)&count=5&callback=?") else {
+        guard let requestURL = NSURL(string: "https://api.instagram.com/v1/users/3121949530/media/recent/?access_token=\(accessToken)&count=4") else {
             print("no requestURL")
             return
         }
@@ -71,6 +90,27 @@ class InstagramViewController: UIViewController {
             print(data)
             print(response)
             print(error)
+            
+            guard let httpResponse = response as? NSHTTPURLResponse else {
+                print("Error: No Response from server")
+                return
+            }
+            
+            let statusCode = httpResponse.statusCode
+            
+            if (statusCode == 200) {
+                
+                print("Instagram API Request Successful")
+                
+                guard let data = data else {
+                    print("Error: No Data sent by API")
+                    return
+                }
+                
+                self.parseJSONData(data)
+                
+            }
+            
             
         }
         
@@ -88,6 +128,72 @@ class InstagramViewController: UIViewController {
         }
         
         return String(token)
+        
+    }
+    
+    
+    /// Get Images from json data.
+    func parseJSONData(data: NSData) {
+        
+        print("parseJSONData Called.")
+        
+        do {
+            
+            let json: AnyObject = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
+            
+            guard let data = json["data"] as? [[String: AnyObject]] else {
+                print("Error: No Data Found")
+                return
+            }
+            
+            
+            for data in data {
+                
+                guard let type = data["type"] as? String else {
+                    print("Error: Type (Image or Video) not found")
+                    return
+                }
+                
+                if type == "image" {
+                    
+                    guard let images = data["images"] as? [String: AnyObject],
+                    let standardResolution = images["standard_resolution"] as? [String: AnyObject],
+                    let imageURL = standardResolution["url"] as? String else {
+                            return
+                    }
+                    
+                    guard let url = NSURL(string: imageURL) else {
+                        return
+                    }
+                    
+                    let request = NSURLRequest(URL: url)
+                    let imgSession = NSURLSession.sharedSession()
+                    let imgTask = imgSession.dataTaskWithRequest(request) {
+                        (data, response, error) -> Void in
+                        
+                        let image = UIImage(data: data!)
+                        
+                        
+                        // Image View needs to be on Main Thread.
+                        self.imageView.image = image
+                        
+                        
+                    }
+                    
+                    imgTask.resume()
+                    
+                }
+                
+            }
+            
+            
+            
+            
+            
+        } catch {
+            
+            print("Error: No JSON Data")
+        }
         
     }
 }
