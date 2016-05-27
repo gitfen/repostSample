@@ -11,10 +11,20 @@ import UIKit
 
 class InstagramViewController: UIViewController {
     
+    
+    // *****************************
+    //   MARK: Global Variables
+    // *****************************
+    
     @IBOutlet weak var printButton: UIButton!
     @IBOutlet weak var instagramButton: UIButton!
     
-//    let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 200, height: 200))
+    
+
+    
+    // *****************************
+    //   MARK: View Load Methods
+    // *****************************
     
     override func viewDidLoad() {
         print("Instagram View Loaded")
@@ -23,8 +33,6 @@ class InstagramViewController: UIViewController {
         instagramButton.hidden = true
         
         getData()
-        
-//        view.addSubview(imageView)
         
     }
     
@@ -37,6 +45,12 @@ class InstagramViewController: UIViewController {
         
     }
     
+    
+    
+    
+    // *****************************
+    //   MARK: Button Methods
+    // *****************************
     
     @IBAction func printData(sender: UIButton) {
         
@@ -51,9 +65,16 @@ class InstagramViewController: UIViewController {
     @IBAction func showImages(sender: UIButton) {
         
         getInstagramImages("123")
+        instagramButton.hidden = true
         
     }
     
+    
+    
+    
+    // *****************************
+    //   MARK: Get Image Methods
+    // *****************************
     
     func getInstagramImages(userId: String) {
         
@@ -70,10 +91,6 @@ class InstagramViewController: UIViewController {
         let session = NSURLSession.sharedSession()
         let task = session.dataTaskWithRequest(urlRequest) {
             (data, response, error) -> Void in
-            
-            print(data)
-            print(response)
-            print(error)
             
             guard let httpResponse = response as? NSHTTPURLResponse else {
                 print("Error: No Response from server")
@@ -153,17 +170,22 @@ class InstagramViewController: UIViewController {
                         self.displayImageFromURL(url, index: index)
                         
                     }
-                }               // End Dispatch
-            }                   // End For Loop
+                }
+            }
             
         } catch {
             
             print("Error: No JSON Data")
+            
         }
         
     }
     
+    
+    /// Get Image Data From URL and call function to Display the image.
     func displayImageFromURL(url: NSURL, index: Int) {
+        
+        print("Display Image From URL called. URL: \(url)")
         
         let request = NSURLRequest(URL: url)
         let imgSession = NSURLSession.sharedSession()
@@ -188,14 +210,16 @@ class InstagramViewController: UIViewController {
         
         let image = UIImage(data: data)
         
-        let xCoord = index * 50
+        let xCoord = (index % 3) * 102
+        let yCoord = ((index / 3) * 102) + 100
         
-        let imageView = UIImageView(frame: CGRect(x: xCoord, y: 40, width: 50, height: 50))
+        let imageView = UIImageView(frame: CGRect(x: xCoord, y: yCoord, width: 100, height: 100))
         imageView.image = image
         
         dispatch_async(GlobalQueue.main) {
             self.view.addSubview(imageView)
         }
+        
     }
     
 }  // End View Controller
