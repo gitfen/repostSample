@@ -14,7 +14,7 @@ class InstagramViewController: UIViewController {
     @IBOutlet weak var printButton: UIButton!
     @IBOutlet weak var instagramButton: UIButton!
     
-    let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 200, height: 200))
+//    let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 200, height: 200))
     
     override func viewDidLoad() {
         print("Instagram View Loaded")
@@ -24,24 +24,8 @@ class InstagramViewController: UIViewController {
         
         getData()
         
-        view.addSubview(imageView)
+//        view.addSubview(imageView)
         
-        // Example on how to display images.  Need to get 'addSubview' on the Main thread.
-        
-//        let imageURL = NSURL(string: "https://scontent.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/13108620_160355351030656_1854262967_n.jpg?ig_cache_key=MTIzNzM4OTc3Mjk1NjU1MjUzNg%3D%3D.2")
-//        let imgRequest = NSURLRequest(URL: imageURL!)
-//        let imgSession = NSURLSession.sharedSession()
-//        let imgTask = imgSession.dataTaskWithRequest(imgRequest) {
-//            (data, response, error) -> Void in
-//            
-//            let image = UIImage(data: data!)
-//            self.imageView.image = image
-//
-//            self.view.addSubview(self.imageView)
-//            
-//        }
-//        
-//        imgTask.resume()
     }
     
     func getData() {
@@ -77,7 +61,7 @@ class InstagramViewController: UIViewController {
         
         let accessToken = getAccessToken()
     
-        guard let requestURL = NSURL(string: "https://api.instagram.com/v1/users/3121949530/media/recent/?access_token=\(accessToken)&count=4") else {
+        guard let requestURL = NSURL(string: "https://api.instagram.com/v1/users/706215427/media/recent/?access_token=\(accessToken)") else {
             print("no requestURL")
             return
         }
@@ -110,8 +94,7 @@ class InstagramViewController: UIViewController {
                 self.parseJSONData(data)
                 
             }
-            
-            
+    
         }
         
         task.resume()
@@ -146,49 +129,32 @@ class InstagramViewController: UIViewController {
                 return
             }
             
-            
-            for data in data {
+            for (index, data) in data.enumerate() {
                 
-                guard let type = data["type"] as? String else {
-                    print("Error: Type (Image or Video) not found")
-                    return
-                }
+                dispatch_async(GlobalQueue.initiated) {
                 
-                if type == "image" {
-                    
-                    guard let images = data["images"] as? [String: AnyObject],
-                    let standardResolution = images["standard_resolution"] as? [String: AnyObject],
-                    let imageURL = standardResolution["url"] as? String else {
-                            return
-                    }
-                    
-                    guard let url = NSURL(string: imageURL) else {
+                    guard let type = data["type"] as? String else {
+                        print("Error: Type (Image or Video) not found")
                         return
                     }
                     
-                    let request = NSURLRequest(URL: url)
-                    let imgSession = NSURLSession.sharedSession()
-                    let imgTask = imgSession.dataTaskWithRequest(request) {
-                        (data, response, error) -> Void in
+                    if type == "image" {
                         
-                        let image = UIImage(data: data!)
+                        guard let images = data["images"] as? [String: AnyObject],
+                        let standardResolution = images["standard_resolution"] as? [String: AnyObject],
+                        let imageURL = standardResolution["url"] as? String else {
+                                return
+                        }
                         
+                        guard let url = NSURL(string: imageURL) else {
+                            return
+                        }
                         
-                        // Image View needs to be on Main Thread.
-                        self.imageView.image = image
-                        
+                        self.displayImageFromURL(url, index: index)
                         
                     }
-                    
-                    imgTask.resume()
-                    
-                }
-                
-            }
-            
-            
-            
-            
+                }               // End Dispatch
+            }                   // End For Loop
             
         } catch {
             
@@ -196,4 +162,40 @@ class InstagramViewController: UIViewController {
         }
         
     }
-}
+    
+    func displayImageFromURL(url: NSURL, index: Int) {
+        
+        let request = NSURLRequest(URL: url)
+        let imgSession = NSURLSession.sharedSession()
+        let imgTask = imgSession.dataTaskWithRequest(request) {
+            (data, response, error) -> Void in
+            
+            guard let data = data else {
+                return
+            }
+            
+            self.displayImageWithData(data, index: index)
+            
+        }
+        
+        imgTask.resume()
+        
+    }
+    
+    
+    /// Display Images
+    func displayImageWithData(data: NSData, index: Int) {
+        
+        let image = UIImage(data: data)
+        
+        let xCoord = index * 50
+        
+        let imageView = UIImageView(frame: CGRect(x: xCoord, y: 40, width: 50, height: 50))
+        imageView.image = image
+        
+        dispatch_async(GlobalQueue.main) {
+            self.view.addSubview(imageView)
+        }
+    }
+    
+}  // End View Controller

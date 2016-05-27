@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2869CD3D1CF892D80099C249 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2869CD3C1CF892D80099C249 /* Utils.swift */; };
 		8499064B1CDFB34400085F72 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8499064A1CDFB34400085F72 /* AppDelegate.swift */; };
 		8499064D1CDFB34400085F72 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8499064C1CDFB34400085F72 /* ViewController.swift */; };
 		849906501CDFB34400085F72 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8499064E1CDFB34400085F72 /* Main.storyboard */; };
@@ -16,11 +17,11 @@
 		8499066B1CDFB34400085F72 /* RepostSampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8499066A1CDFB34400085F72 /* RepostSampleUITests.swift */; };
 		8499067B1CDFB65F00085F72 /* OAuthSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 849906781CDFB4D700085F72 /* OAuthSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8499067D1CDFB68C00085F72 /* OAuthSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 849906781CDFB4D700085F72 /* OAuthSwift.framework */; };
-		849906801CDFBB7000085F72 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8499067E1CDFB8C500085F72 /* WebViewController.swift */; settings = {ASSET_TAGS = (); }; };
-		849906821CDFBD9C00085F72 /* Services.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849906811CDFBD9C00085F72 /* Services.swift */; settings = {ASSET_TAGS = (); }; };
-		849906841CDFE64300085F72 /* Services.plist in Resources */ = {isa = PBXBuildFile; fileRef = 849906831CDFE64300085F72 /* Services.plist */; settings = {ASSET_TAGS = (); }; };
-		849906861CE00CF200085F72 /* InstagramViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849906851CE00CF200085F72 /* InstagramViewController.swift */; settings = {ASSET_TAGS = (); }; };
-		849906881CE01BC100085F72 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849906871CE01BC100085F72 /* Model.swift */; settings = {ASSET_TAGS = (); }; };
+		849906801CDFBB7000085F72 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8499067E1CDFB8C500085F72 /* WebViewController.swift */; };
+		849906821CDFBD9C00085F72 /* Services.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849906811CDFBD9C00085F72 /* Services.swift */; };
+		849906841CDFE64300085F72 /* Services.plist in Resources */ = {isa = PBXBuildFile; fileRef = 849906831CDFE64300085F72 /* Services.plist */; };
+		849906861CE00CF200085F72 /* InstagramViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849906851CE00CF200085F72 /* InstagramViewController.swift */; };
+		849906881CE01BC100085F72 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849906871CE01BC100085F72 /* Model.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2869CD3C1CF892D80099C249 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		849906471CDFB34400085F72 /* RepostSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RepostSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8499064A1CDFB34400085F72 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8499064C1CDFB34400085F72 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -137,6 +139,7 @@
 				849906561CDFB34400085F72 /* Info.plist */,
 				849906811CDFBD9C00085F72 /* Services.swift */,
 				849906831CDFE64300085F72 /* Services.plist */,
+				2869CD3C1CF892D80099C249 /* Utils.swift */,
 			);
 			path = RepostSample;
 			sourceTree = "<group>";
@@ -297,6 +300,7 @@
 				8499064D1CDFB34400085F72 /* ViewController.swift in Sources */,
 				849906821CDFBD9C00085F72 /* Services.swift in Sources */,
 				849906801CDFBB7000085F72 /* WebViewController.swift in Sources */,
+				2869CD3D1CF892D80099C249 /* Utils.swift in Sources */,
 				849906881CE01BC100085F72 /* Model.swift in Sources */,
 				8499064B1CDFB34400085F72 /* AppDelegate.swift in Sources */,
 				849906861CE00CF200085F72 /* InstagramViewController.swift in Sources */,
@@ -534,6 +538,7 @@
 				849906711CDFB34400085F72 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		849906721CDFB34400085F72 /* Build configuration list for PBXNativeTarget "RepostSampleTests" */ = {
 			isa = XCConfigurationList;
@@ -542,6 +547,7 @@
 				849906741CDFB34400085F72 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		849906751CDFB34400085F72 /* Build configuration list for PBXNativeTarget "RepostSampleUITests" */ = {
 			isa = XCConfigurationList;
@@ -550,6 +556,7 @@
 				849906771CDFB34400085F72 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
