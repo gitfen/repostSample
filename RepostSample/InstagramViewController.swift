@@ -66,9 +66,10 @@ class InstagramViewController: UIViewController {
     
     @IBAction func showImages(sender: UIButton) {
         
-        getInstagramImages("123")
-        instagramButton.hidden = true
-        //instagramCollectionView.hidden = false
+        dispatch_async(GlobalQueue.interactive) { () -> Void in
+            self.getInstagramImages("123")
+            self.instagramButton.hidden = true
+        }
         
     }
     
@@ -152,35 +153,32 @@ class InstagramViewController: UIViewController {
                 return
             }
             
-            dispatch_async(GlobalQueue.interactive) { () -> Void in
-            
-                for (index, data) in data.enumerate() {
+            for (index, data) in data.enumerate() {
+                
+                dispatch_async(GlobalQueue.initiated) {
                     
-                    dispatch_async(GlobalQueue.initiated) {
+                    let info = InstagramImage(data: data, index: index)
+                    print(info.data["type"])
+                
+                    guard let type = data["type"] as? String else {
+                        print("Error: Type (Image or Video) not found")
+                        return
+                    }
+                    
+                    if type == "image" {
                         
-                        let info = InstagramImage(data: data, index: index)
-                        print(info.data["type"])
-                    
-                        guard let type = data["type"] as? String else {
-                            print("Error: Type (Image or Video) not found")
+                        guard let images = data["images"] as? [String: AnyObject],
+                        let standardResolution = images["standard_resolution"] as? [String: AnyObject],
+                        let imageURL = standardResolution["url"] as? String else {
+                                return
+                        }
+                        
+                        guard let url = NSURL(string: imageURL) else {
                             return
                         }
                         
-                        if type == "image" {
-                            
-                            guard let images = data["images"] as? [String: AnyObject],
-                            let standardResolution = images["standard_resolution"] as? [String: AnyObject],
-                            let imageURL = standardResolution["url"] as? String else {
-                                    return
-                            }
-                            
-                            guard let url = NSURL(string: imageURL) else {
-                                return
-                            }
-                            
-                            self.displayImageFromURL(url, index: index)
-                            
-                        }
+                        self.displayImageFromURL(url, index: index)
+                        
                     }
                 }
             }
@@ -222,15 +220,15 @@ class InstagramViewController: UIViewController {
     /// Display Images
     func displayImageWithData(data: NSData, index: Int) {
         
-        let image = UIImage(data: data)
-        
-        let xCoord = (index % 3) * 102
-        let yCoord = ((index / 3) * 102) + 100
-        
-        let imageView = UIImageView(frame: CGRect(x: xCoord, y: yCoord, width: 100, height: 100))
-        imageView.image = image
-        
         dispatch_async(GlobalQueue.main) {
+            let image = UIImage(data: data)
+            
+            let xCoord = (index % 3) * 102
+            let yCoord = ((index / 3) * 102) + 100
+            
+            let imageView = UIImageView(frame: CGRect(x: xCoord, y: yCoord, width: 100, height: 100))
+            imageView.image = image
+
             self.view.addSubview(imageView)
         }
         
