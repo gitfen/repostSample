@@ -157,6 +157,7 @@
                     </view>
                     <connections>
                         <outlet property="instagramButton" destination="UGD-8M-bmb" id="5dd-Tx-fK9"/>
+                        <outlet property="instagramCollectionView" destination="lSq-V8-aUH" id="pMw-vE-LgA"/>
                         <outlet property="printButton" destination="ZFd-t9-NQl" id="SX3-27-yd0"/>
                     </connections>
                 </viewController>

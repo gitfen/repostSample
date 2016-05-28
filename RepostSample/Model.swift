@@ -24,3 +24,17 @@ class Model {
     
     
 }
+
+class InstagramImage {
+    
+    var data: [String: AnyObject]
+    var index: Int
+    
+    init(data: [String: AnyObject], index: Int) {
+        self.data = data
+        self.index = index
+    }
+    
+}
+
+

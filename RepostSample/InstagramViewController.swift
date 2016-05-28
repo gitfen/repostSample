@@ -19,6 +19,7 @@ class InstagramViewController: UIViewController {
     @IBOutlet weak var printButton: UIButton!
     @IBOutlet weak var instagramButton: UIButton!
     
+    @IBOutlet weak var instagramCollectionView: UICollectionView!
     
 
     
@@ -31,6 +32,7 @@ class InstagramViewController: UIViewController {
         print(Model.data)
         
         instagramButton.hidden = true
+        instagramCollectionView.hidden = true
         
         getData()
         
@@ -66,6 +68,7 @@ class InstagramViewController: UIViewController {
         
         getInstagramImages("123")
         instagramButton.hidden = true
+        //instagramCollectionView.hidden = false
         
     }
     
@@ -81,6 +84,8 @@ class InstagramViewController: UIViewController {
         print("getInstagramImages called. User \(userId)")
         
         let accessToken = getAccessToken()
+        
+        print("https://api.instagram.com/v1/users/706215427/media/recent/?access_token=\(accessToken)")
     
         guard let requestURL = NSURL(string: "https://api.instagram.com/v1/users/706215427/media/recent/?access_token=\(accessToken)") else {
             print("no requestURL")
@@ -147,29 +152,35 @@ class InstagramViewController: UIViewController {
                 return
             }
             
-            for (index, data) in data.enumerate() {
-                
-                dispatch_async(GlobalQueue.initiated) {
-                
-                    guard let type = data["type"] as? String else {
-                        print("Error: Type (Image or Video) not found")
-                        return
-                    }
+            dispatch_async(GlobalQueue.interactive) { () -> Void in
+            
+                for (index, data) in data.enumerate() {
                     
-                    if type == "image" {
+                    dispatch_async(GlobalQueue.initiated) {
                         
-                        guard let images = data["images"] as? [String: AnyObject],
-                        let standardResolution = images["standard_resolution"] as? [String: AnyObject],
-                        let imageURL = standardResolution["url"] as? String else {
-                                return
-                        }
-                        
-                        guard let url = NSURL(string: imageURL) else {
+                        let info = InstagramImage(data: data, index: index)
+                        print(info.data["type"])
+                    
+                        guard let type = data["type"] as? String else {
+                            print("Error: Type (Image or Video) not found")
                             return
                         }
                         
-                        self.displayImageFromURL(url, index: index)
-                        
+                        if type == "image" {
+                            
+                            guard let images = data["images"] as? [String: AnyObject],
+                            let standardResolution = images["standard_resolution"] as? [String: AnyObject],
+                            let imageURL = standardResolution["url"] as? String else {
+                                    return
+                            }
+                            
+                            guard let url = NSURL(string: imageURL) else {
+                                return
+                            }
+                            
+                            self.displayImageFromURL(url, index: index)
+                            
+                        }
                     }
                 }
             }
@@ -196,6 +207,8 @@ class InstagramViewController: UIViewController {
             guard let data = data else {
                 return
             }
+            
+            print("\(response) Image Returned")
             
             self.displayImageWithData(data, index: index)
             
