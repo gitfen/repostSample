@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -19,7 +20,7 @@
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CXc-bf-Eie">
                                 <rect key="frame" x="231" y="285" width="138" height="30"/>
-                                <state key="normal" title="Things and Stuff"/>
+                                <state key="normal" title="Login"/>
                                 <connections>
                                     <action selector="InstagramLogin:" destination="BYZ-38-t0r" eventType="touchUpInside" id="pTy-wj-QCs"/>
                                 </connections>
@@ -65,14 +66,94 @@
                                     <action selector="showImages:" destination="z6C-Cs-mBA" eventType="touchUpInside" id="1dp-jv-97k"/>
                                 </connections>
                             </button>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vx5-dO-MyV">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="VR0-Qz-Wwx"/>
+                                </constraints>
+                                <items>
+                                    <navigationItem title="Instagram Photos" id="Tgt-bd-OIR"/>
+                                </items>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="VR0-Qz-Wwx"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular">
+                                    <mask key="constraints">
+                                        <include reference="VR0-Qz-Wwx"/>
+                                    </mask>
+                                </variation>
+                            </navigationBar>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="lSq-V8-aUH">
+                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="5" minimumInteritemSpacing="5" id="pcv-qu-tJJ">
+                                    <size key="itemSize" width="100" height="100"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="5" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="instagramCell" id="Qdt-Ah-L8l" customClass="InstagramCollectionCell" customModule="RepostSample" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </collectionViewCell>
+                                </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="z6C-Cs-mBA" id="oBL-mt-3j4"/>
+                                    <outlet property="delegate" destination="z6C-Cs-mBA" id="95N-Vn-28y"/>
+                                </connections>
+                            </collectionView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="Vx5-dO-MyV" firstAttribute="top" secondItem="XgE-kz-SvQ" secondAttribute="bottom" id="00r-fr-ShW"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="lSq-V8-aUH" secondAttribute="trailing" constant="-20" id="6ND-Yo-ekD"/>
+                            <constraint firstItem="lSq-V8-aUH" firstAttribute="top" secondItem="Vx5-dO-MyV" secondAttribute="bottom" id="NBd-ph-ff8"/>
+                            <constraint firstItem="Vx5-dO-MyV" firstAttribute="leading" secondItem="QLe-Ye-sQO" secondAttribute="leadingMargin" constant="-20" id="Rdd-Kh-mEh"/>
+                            <constraint firstItem="xTX-O6-jQu" firstAttribute="top" secondItem="lSq-V8-aUH" secondAttribute="bottom" id="WyU-9M-e6b"/>
+                            <constraint firstItem="lSq-V8-aUH" firstAttribute="leading" secondItem="QLe-Ye-sQO" secondAttribute="leadingMargin" constant="-20" id="dBK-Ux-Qfn"/>
                             <constraint firstItem="UGD-8M-bmb" firstAttribute="centerX" secondItem="QLe-Ye-sQO" secondAttribute="centerX" id="fik-sn-Ppz"/>
                             <constraint firstItem="UGD-8M-bmb" firstAttribute="centerY" secondItem="QLe-Ye-sQO" secondAttribute="centerY" id="gyo-Kz-zRv"/>
                             <constraint firstItem="ZFd-t9-NQl" firstAttribute="centerY" secondItem="QLe-Ye-sQO" secondAttribute="centerY" id="s6Y-UV-OBD"/>
                             <constraint firstItem="ZFd-t9-NQl" firstAttribute="centerX" secondItem="QLe-Ye-sQO" secondAttribute="centerX" id="uUe-B2-q8t"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Vx5-dO-MyV" secondAttribute="trailing" constant="-20" id="yCg-6y-6cq"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="Vx5-dO-MyV"/>
+                                <exclude reference="lSq-V8-aUH"/>
+                            </mask>
+                            <mask key="constraints">
+                                <exclude reference="00r-fr-ShW"/>
+                                <exclude reference="Rdd-Kh-mEh"/>
+                                <exclude reference="yCg-6y-6cq"/>
+                                <exclude reference="6ND-Yo-ekD"/>
+                                <exclude reference="NBd-ph-ff8"/>
+                                <exclude reference="dBK-Ux-Qfn"/>
+                                <exclude reference="WyU-9M-e6b"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=regular">
+                            <mask key="subviews">
+                                <include reference="Vx5-dO-MyV"/>
+                                <include reference="lSq-V8-aUH"/>
+                            </mask>
+                            <mask key="constraints">
+                                <include reference="00r-fr-ShW"/>
+                                <include reference="Rdd-Kh-mEh"/>
+                                <include reference="yCg-6y-6cq"/>
+                                <include reference="6ND-Yo-ekD"/>
+                                <include reference="NBd-ph-ff8"/>
+                                <include reference="dBK-Ux-Qfn"/>
+                                <include reference="WyU-9M-e6b"/>
+                            </mask>
+                        </variation>
                     </view>
                     <connections>
                         <outlet property="instagramButton" destination="UGD-8M-bmb" id="5dd-Tx-fK9"/>
@@ -81,7 +162,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AZ6-w5-BS3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="868" y="426"/>
+            <point key="canvasLocation" x="864" y="417.75"/>
         </scene>
     </scenes>
 </document>

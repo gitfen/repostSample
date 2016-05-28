@@ -87,9 +87,9 @@ class InstagramViewController: UIViewController {
             return
         }
         
-        let urlRequest = NSMutableURLRequest(URL: requestURL)
+        // let urlRequest = NSMutableURLRequest(URL: requestURL)
         let session = NSURLSession.sharedSession()
-        let task = session.dataTaskWithRequest(urlRequest) {
+        let task = session.dataTaskWithURL(requestURL) {
             (data, response, error) -> Void in
             
             guard let httpResponse = response as? NSHTTPURLResponse else {
@@ -115,6 +115,7 @@ class InstagramViewController: UIViewController {
         }
         
         task.resume()
+        
         
     }
     
@@ -223,3 +224,36 @@ class InstagramViewController: UIViewController {
     }
     
 }  // End View Controller
+
+
+
+
+extension InstagramViewController : UICollectionViewDataSource {
+    
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 20
+    }
+    
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("instagramCell", forIndexPath: indexPath) as! InstagramCollectionCell
+        cell.backgroundColor = UIColor.whiteColor()
+        return cell
+    }
+    
+}
+
+
+extension InstagramViewController : UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+        
+        let screenSize: CGRect = UIScreen.mainScreen().bounds
+        
+        let screenWidth = screenSize.width
+        let cellSize = (screenWidth - 10) / 3
+        
+        return CGSize(width: cellSize, height: cellSize)
+    }
+    
+    
+}
