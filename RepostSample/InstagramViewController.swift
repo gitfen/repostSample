@@ -21,6 +21,9 @@ class InstagramViewController: UIViewController {
     
     @IBOutlet weak var instagramCollectionView: UICollectionView!
     
+    var instagramImages = []
+    var imageArray: [UIImage?]?
+    
 
     
     // *****************************
@@ -29,7 +32,7 @@ class InstagramViewController: UIViewController {
     
     override func viewDidLoad() {
         print("Instagram View Loaded")
-        print(Model.data)
+        //print(Model.data)
         
         instagramButton.hidden = true
         instagramCollectionView.hidden = true
@@ -39,11 +42,24 @@ class InstagramViewController: UIViewController {
     }
     
     func getData() {
-        if (Model.data != nil) {
-            getData()
-        }
+//        if (Model.data != nil) {
+//            print(Model.data)
+//        } else {
+//            getData()
+//        }
         
         print(Model.data)
+        instagramButton.hidden = false
+        printButton.hidden = true
+        
+        
+        // TODO: Add KVO or Observe pattern to Model.
+
+//        dispatch_async(GlobalQueue.interactive) { () -> Void in
+//            print("STUFF")
+//            self.getInstagramImages("123")
+//        }
+
         
     }
     
@@ -55,6 +71,11 @@ class InstagramViewController: UIViewController {
     // *****************************
     
     @IBAction func printData(sender: UIButton) {
+        
+        instagramImages = ["ONE", "TWO", "THREE", "FOUR"]
+        instagramCollectionView.reloadData()
+        print(instagramImages)
+        instagramCollectionView.reloadItemsAtIndexPaths([NSIndexPath(forItem: 2, inSection: 0)])
         
         print(Model.data)
         
@@ -70,6 +91,7 @@ class InstagramViewController: UIViewController {
             self.getInstagramImages("123")
             self.instagramButton.hidden = true
         }
+        instagramCollectionView.hidden = false
         
     }
     
@@ -153,11 +175,19 @@ class InstagramViewController: UIViewController {
                 return
             }
             
-            for (index, data) in data.enumerate() {
+            imageArray = [UIImage?](count: data.count, repeatedValue: nil)
+            instagramImages = data
+            dispatch_async(GlobalQueue.main, { () -> Void in
+                self.instagramCollectionView.reloadData()
+            })
+            
+            print("Data Count: \(instagramImages.count)")
+            
+            for (index, data) in instagramImages.enumerate() {
                 
                 dispatch_async(GlobalQueue.initiated) {
                     
-                    let info = InstagramImage(data: data, index: index)
+                    let info = InstagramImage(data: data as! [String : AnyObject], index: index)
                     print(info.data["type"])
                 
                     guard let type = data["type"] as? String else {
@@ -223,13 +253,19 @@ class InstagramViewController: UIViewController {
         dispatch_async(GlobalQueue.main) {
             let image = UIImage(data: data)
             
-            let xCoord = (index % 3) * 102
-            let yCoord = ((index / 3) * 102) + 100
+//            let xCoord = (index % 3) * 102
+//            let yCoord = ((index / 3) * 102) + 100
+//            
+//            let imageView = UIImageView(frame: CGRect(x: xCoord, y: yCoord, width: 100, height: 100))
+//            imageView.image = image
+//
+//            self.view.addSubview(imageView)
             
-            let imageView = UIImageView(frame: CGRect(x: xCoord, y: yCoord, width: 100, height: 100))
-            imageView.image = image
-
-            self.view.addSubview(imageView)
+            if (self.imageArray != nil) {
+                print("Image Updated: \(index)")
+                self.imageArray![index] = image
+                self.instagramCollectionView.reloadItemsAtIndexPaths([NSIndexPath(forItem: index, inSection: 0)])
+            }
         }
         
     }
@@ -242,13 +278,31 @@ class InstagramViewController: UIViewController {
 extension InstagramViewController : UICollectionViewDataSource {
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 20
+        return instagramImages.count
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("instagramCell", forIndexPath: indexPath) as! InstagramCollectionCell
-        cell.backgroundColor = UIColor.whiteColor()
+        //cell.cellLabel.text = instagramImages[indexPath.item] as? String
+        guard let array = imageArray else {
+            return cell
+        }
+        
+        if let image = array[indexPath.item] {
+            cell.cellImage.image = image
+        }
+        //cell.cellImage = imageArray[indexPath.item] as? UIImage
+        cell.backgroundColor = UIColor.blackColor()
         return cell
+    }
+    
+}
+
+
+extension InstagramViewController : UICollectionViewDelegate {
+    
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        instagramCollectionView.reloadItemsAtIndexPaths([indexPath])
     }
     
 }

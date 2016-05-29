@@ -100,8 +100,59 @@
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Ej-92-jG2">
+                                                    <rect key="frame" x="-42" y="-21" width="42" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Dop-tc-wJg">
+                                                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                                </imageView>
+                                            </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
+                                        <constraints>
+                                            <constraint firstAttribute="bottomMargin" secondItem="Dop-tc-wJg" secondAttribute="bottom" constant="-8" id="Mbc-7Z-tG1"/>
+                                            <constraint firstItem="Dop-tc-wJg" firstAttribute="leading" secondItem="Qdt-Ah-L8l" secondAttribute="leadingMargin" constant="-8" id="NFo-Sr-Egm"/>
+                                            <constraint firstItem="Dop-tc-wJg" firstAttribute="top" secondItem="Qdt-Ah-L8l" secondAttribute="topMargin" constant="-8" id="YLr-ve-ZoI"/>
+                                            <constraint firstAttribute="trailingMargin" secondItem="Dop-tc-wJg" secondAttribute="trailing" constant="-8" id="j6f-Z2-cqf"/>
+                                            <constraint firstItem="3Ej-92-jG2" firstAttribute="centerX" secondItem="Qdt-Ah-L8l" secondAttribute="centerX" id="jyW-qf-lwJ"/>
+                                            <constraint firstItem="3Ej-92-jG2" firstAttribute="centerY" secondItem="Qdt-Ah-L8l" secondAttribute="centerY" id="xUk-d2-1Az"/>
+                                        </constraints>
+                                        <variation key="default">
+                                            <mask key="subviews">
+                                                <exclude reference="3Ej-92-jG2"/>
+                                                <exclude reference="Dop-tc-wJg"/>
+                                            </mask>
+                                            <mask key="constraints">
+                                                <exclude reference="Mbc-7Z-tG1"/>
+                                                <exclude reference="NFo-Sr-Egm"/>
+                                                <exclude reference="YLr-ve-ZoI"/>
+                                                <exclude reference="j6f-Z2-cqf"/>
+                                                <exclude reference="jyW-qf-lwJ"/>
+                                                <exclude reference="xUk-d2-1Az"/>
+                                            </mask>
+                                        </variation>
+                                        <variation key="heightClass=regular">
+                                            <mask key="subviews">
+                                                <include reference="3Ej-92-jG2"/>
+                                                <include reference="Dop-tc-wJg"/>
+                                            </mask>
+                                            <mask key="constraints">
+                                                <include reference="Mbc-7Z-tG1"/>
+                                                <include reference="NFo-Sr-Egm"/>
+                                                <include reference="YLr-ve-ZoI"/>
+                                                <include reference="j6f-Z2-cqf"/>
+                                                <include reference="jyW-qf-lwJ"/>
+                                                <include reference="xUk-d2-1Az"/>
+                                            </mask>
+                                        </variation>
+                                        <connections>
+                                            <outlet property="cellImage" destination="Dop-tc-wJg" id="oS1-Mm-oM2"/>
+                                            <outlet property="cellLabel" destination="3Ej-92-jG2" id="4VO-80-bau"/>
+                                        </connections>
                                     </collectionViewCell>
                                 </cells>
                                 <connections>

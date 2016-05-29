@@ -11,5 +11,7 @@ import UIKit
 
 class InstagramCollectionCell: UICollectionViewCell {
     
+    @IBOutlet weak var cellLabel: UILabel!
+    @IBOutlet weak var cellImage: UIImageView!
     
 }
