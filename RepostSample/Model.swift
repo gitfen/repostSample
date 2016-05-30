@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftyJSON
 
 class Model {
     
@@ -27,12 +28,55 @@ class Model {
 
 class InstagramImage {
     
-    var data: [String: AnyObject]
-    var index: Int
+    var json: JSON
     
-    init(data: [String: AnyObject], index: Int) {
-        self.data = data
-        self.index = index
+    init(json: JSON) {
+        self.json = json
+    }
+}
+
+
+extension InstagramImage {
+    
+    var attribution: String? {
+        guard let attribution = json["attribution"].string else {
+            return nil
+        }
+        return attribution
+    }
+    
+    var type: String? {
+        guard let type = json["type"].string else {
+            return nil
+        }
+        return type
+    }
+    
+    var videoViews: Int? {
+        guard let videoViews = json["video_views"].int else {
+            return nil
+        }
+        return videoViews
+    }
+    
+    func getImageURL() -> String? {
+        
+        let images = json["images"]
+        
+        if let url = images["high_resolution"]["url"].string {
+            return url
+        }
+        
+        if let url = images["standard_resolution"]["url"].string {
+            return url
+        }
+        
+        if let url = images["low_resolution"]["url"].string {
+            return url
+        }
+        
+        return nil
+        
     }
     
 }

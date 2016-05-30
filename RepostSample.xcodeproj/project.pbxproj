@@ -10,6 +10,8 @@
 		2869CD3D1CF892D80099C249 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2869CD3C1CF892D80099C249 /* Utils.swift */; };
 		84317EC51CFA03FC005F4ABB /* InstagramCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84317EC41CFA03FC005F4ABB /* InstagramCollectionCell.swift */; settings = {ASSET_TAGS = (); }; };
 		84317EC71CFBD015005F4ABB /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84317EC61CFBD015005F4ABB /* ImageViewController.swift */; settings = {ASSET_TAGS = (); }; };
+		84317EC91CFC8FF5005F4ABB /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84317EC81CFC8FF5005F4ABB /* SwiftyJSON.framework */; };
+		84317ECA1CFC8FF5005F4ABB /* SwiftyJSON.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 84317EC81CFC8FF5005F4ABB /* SwiftyJSON.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8499064B1CDFB34400085F72 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8499064A1CDFB34400085F72 /* AppDelegate.swift */; };
 		8499064D1CDFB34400085F72 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8499064C1CDFB34400085F72 /* ViewController.swift */; };
 		849906501CDFB34400085F72 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8499064E1CDFB34400085F72 /* Main.storyboard */; };
@@ -50,6 +52,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				84317ECA1CFC8FF5005F4ABB /* SwiftyJSON.framework in Embed Frameworks */,
 				8499067B1CDFB65F00085F72 /* OAuthSwift.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -61,6 +64,7 @@
 		2869CD3C1CF892D80099C249 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		84317EC41CFA03FC005F4ABB /* InstagramCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstagramCollectionCell.swift; sourceTree = "<group>"; };
 		84317EC61CFBD015005F4ABB /* ImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
+		84317EC81CFC8FF5005F4ABB /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
 		849906471CDFB34400085F72 /* RepostSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RepostSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8499064A1CDFB34400085F72 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8499064C1CDFB34400085F72 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -87,6 +91,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84317EC91CFC8FF5005F4ABB /* SwiftyJSON.framework in Frameworks */,
 				8499067D1CDFB68C00085F72 /* OAuthSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -111,6 +116,7 @@
 		8499063E1CDFB34400085F72 = {
 			isa = PBXGroup;
 			children = (
+				84317EC81CFC8FF5005F4ABB /* SwiftyJSON.framework */,
 				849906781CDFB4D700085F72 /* OAuthSwift.framework */,
 				849906491CDFB34400085F72 /* RepostSample */,
 				8499065E1CDFB34400085F72 /* RepostSampleTests */,
@@ -136,9 +142,9 @@
 				8499064C1CDFB34400085F72 /* ViewController.swift */,
 				849906851CE00CF200085F72 /* InstagramViewController.swift */,
 				84317EC61CFBD015005F4ABB /* ImageViewController.swift */,
+				8499067E1CDFB8C500085F72 /* WebViewController.swift */,
 				84317EC41CFA03FC005F4ABB /* InstagramCollectionCell.swift */,
 				849906871CE01BC100085F72 /* Model.swift */,
-				8499067E1CDFB8C500085F72 /* WebViewController.swift */,
 				2869CD3C1CF892D80099C249 /* Utils.swift */,
 				849906811CDFBD9C00085F72 /* Services.swift */,
 				8499064E1CDFB34400085F72 /* Main.storyboard */,

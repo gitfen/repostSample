@@ -1,0 +1,2 @@
+github "OAuthSwift/OAuthSwift" ~> 0.5.0
+github "SwiftyJSON/SwiftyJSON"

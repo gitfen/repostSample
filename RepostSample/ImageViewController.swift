@@ -8,16 +8,17 @@
 
 import Foundation
 import UIKit
+import SwiftyJSON
 
 class ImageViewController : UIViewController {
     
     @IBOutlet weak var repostImage: UIImageView!
     
-    var imageData: AnyObject!
+    var imageData: InstagramImage!
     
     @IBAction func printData(sender: AnyObject) {
         
-        print(imageData)
+        print(imageData.videoViews)
         
     }
     

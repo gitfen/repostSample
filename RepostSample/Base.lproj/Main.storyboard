@@ -3,6 +3,7 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -211,6 +212,7 @@
                         <viewControllerLayoutGuide type="bottom" id="csR-95-Y8g"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="efH-eT-cBg">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dKU-GM-oGd">
@@ -232,12 +234,6 @@
                                     </mask>
                                 </variation>
                             </navigationBar>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vaY-pp-vjt">
-                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                                <variation key="heightClass=regular" ambiguous="YES" misplaced="YES">
-                                    <rect key="frame" x="0.0" y="64" width="600" height="514"/>
-                                </variation>
-                            </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="krm-F4-N6z">
                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                                 <state key="normal" title="Print Data"/>
@@ -245,6 +241,22 @@
                                     <action selector="printData:" destination="TKY-5l-PDR" eventType="touchUpInside" id="m8Z-Uu-OMz"/>
                                 </connections>
                             </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vaY-pp-vjt">
+                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="vaY-pp-vjt" secondAttribute="height" multiplier="1:1" id="QhG-tS-dq9"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="QhG-tS-dq9"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular">
+                                    <mask key="constraints">
+                                        <include reference="QhG-tS-dq9"/>
+                                    </mask>
+                                </variation>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -260,35 +272,35 @@
                         <variation key="default">
                             <mask key="subviews">
                                 <exclude reference="dKU-GM-oGd"/>
-                                <exclude reference="vaY-pp-vjt"/>
                                 <exclude reference="krm-F4-N6z"/>
+                                <exclude reference="vaY-pp-vjt"/>
                             </mask>
                             <mask key="constraints">
+                                <exclude reference="HWn-34-d3E"/>
+                                <exclude reference="T4d-F2-OjK"/>
                                 <exclude reference="kSX-al-Mu9"/>
                                 <exclude reference="sLk-Hk-HnN"/>
                                 <exclude reference="yFO-sl-sII"/>
                                 <exclude reference="4pe-6w-7e1"/>
                                 <exclude reference="teY-pV-h3G"/>
                                 <exclude reference="z6v-YW-5Yc"/>
-                                <exclude reference="T4d-F2-OjK"/>
-                                <exclude reference="HWn-34-d3E"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular">
                             <mask key="subviews">
                                 <include reference="dKU-GM-oGd"/>
-                                <include reference="vaY-pp-vjt"/>
                                 <include reference="krm-F4-N6z"/>
+                                <include reference="vaY-pp-vjt"/>
                             </mask>
                             <mask key="constraints">
+                                <include reference="HWn-34-d3E"/>
+                                <include reference="T4d-F2-OjK"/>
                                 <include reference="kSX-al-Mu9"/>
                                 <include reference="sLk-Hk-HnN"/>
                                 <include reference="yFO-sl-sII"/>
                                 <include reference="4pe-6w-7e1"/>
                                 <include reference="teY-pV-h3G"/>
                                 <include reference="z6v-YW-5Yc"/>
-                                <include reference="T4d-F2-OjK"/>
-                                <include reference="HWn-34-d3E"/>
                             </mask>
                         </variation>
                     </view>

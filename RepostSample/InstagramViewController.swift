@@ -8,27 +8,29 @@
 
 import Foundation
 import UIKit
+import SwiftyJSON
 
 class InstagramViewController: UIViewController {
     
     
-    // *****************************
+    // **************************************************************************************
     //   MARK: Global Variables
-    // *****************************
+    // **************************************************************************************
     
     @IBOutlet weak var printButton: UIButton!
     @IBOutlet weak var instagramButton: UIButton!
     
     @IBOutlet weak var instagramCollectionView: UICollectionView!
     
-    var instagramImages = []
+    var instagramImages: [InstagramImage?] = []
     var imageArray: [UIImage?]?
     
 
     
-    // *****************************
+    
+    // **************************************************************************************
     //   MARK: View Load Methods
-    // *****************************
+    // **************************************************************************************
     
     override func viewDidLoad() {
         print("Instagram View Loaded")
@@ -61,13 +63,12 @@ class InstagramViewController: UIViewController {
     
     
     
-    // *****************************
+    // **************************************************************************************
     //   MARK: Button Methods
-    // *****************************
+    // **************************************************************************************
     
     @IBAction func printData(sender: UIButton) {
         
-        instagramImages = ["ONE", "TWO", "THREE", "FOUR"]
         instagramCollectionView.reloadData()
         print(instagramImages)
         instagramCollectionView.reloadItemsAtIndexPaths([NSIndexPath(forItem: 2, inSection: 0)])
@@ -93,9 +94,9 @@ class InstagramViewController: UIViewController {
     
     
     
-    // *****************************
-    //   MARK: Get Image Methods
-    // *****************************
+    // **************************************************************************************
+    //   MARK: Get Images Methods
+    // **************************************************************************************
     
     func getInstagramImages(userId: String) {
         
@@ -158,57 +159,39 @@ class InstagramViewController: UIViewController {
         
         print("parseJSONData Called.")
         
-        do {
             
-            let json: AnyObject = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
-            
-            guard let data = json["data"] as? [[String: AnyObject]] else {
-                print("Error: No Data Found")
-                return
-            }
-            
-            // TODO: Collect Images from data verse from Instagram 
-            imageArray = [UIImage?](count: data.count, repeatedValue: nil)
-            instagramImages = data
-            dispatch_async(GlobalQueue.main, { () -> Void in
-                self.instagramCollectionView.reloadData()
-            })
-            
-            print("Data Count: \(instagramImages.count)")
-            
-            for (index, data) in instagramImages.enumerate() {
-                
-                dispatch_async(GlobalQueue.initiated) {
-                    
-//                    let info = InstagramImage(data: data as! [String : AnyObject], index: index)
-//                
-//                    guard let type = data["type"] as? String else {
-//                        print("Error: Type (Image or Video) not found")
-//                        return
-//                    }
-                    
-                        
-                    guard let images = data["images"] as? [String: AnyObject],
-                    let standardResolution = images["standard_resolution"] as? [String: AnyObject],
-                    let imageURL = standardResolution["url"] as? String else {
-                            return
-                    }
-                    
-                    guard let url = NSURL(string: imageURL) else {
-                        return
-                    }
-                    
-                    self.displayImageFromURL(url, index: index)
-                        
-                }
-            }
-            
-        } catch {
-            
-            print("Error: No JSON Data")
-            
-        }
+        let json = JSON(data: data)
+        let data = json["data"]
         
+        // TODO: Collect Images from data verse from Instagram 
+        imageArray = [UIImage?](count: data.count, repeatedValue: nil)
+        instagramImages = [InstagramImage?](count: data.count, repeatedValue: nil)
+        dispatch_async(GlobalQueue.main, { () -> Void in
+            self.instagramCollectionView.reloadData()
+        })
+        
+        print("Data Count: \(data.count)")
+        
+        for (index, data) in data {
+            
+            dispatch_async(GlobalQueue.initiated) {
+                
+                guard let index = Int(index) else {
+                    return
+                }
+                
+                self.instagramImages[index] = InstagramImage(json: data)
+                
+                let imageURL = data["images"]["thumbnail"]["url"].stringValue
+                
+                guard let url = NSURL(string: imageURL) else {
+                    return
+                }
+                
+                self.displayImageFromURL(url, index: index)
+                    
+            }
+        }
     }
     
     
@@ -252,6 +235,14 @@ class InstagramViewController: UIViewController {
         
     }
     
+    
+    
+    
+    
+    // **************************************************************************************
+    //   MARK: Segue Methods
+    // **************************************************************************************
+   
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         if segue.identifier == "showImage" {
@@ -268,7 +259,6 @@ class InstagramViewController: UIViewController {
             
             imageViewController.imageData = instagramImages[indexPath.row]
             
-            
         }
         
     }
@@ -278,10 +268,19 @@ class InstagramViewController: UIViewController {
 
 
 
+
+// ******************************************************************************************
+//   MARK: Collection View Extensions
+// ******************************************************************************************
+
 extension InstagramViewController : UICollectionViewDataSource {
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return instagramImages.count
+        if instagramImages.count > 0 {
+            return instagramImages.count
+        } else {
+            return 20
+        }
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
@@ -298,7 +297,7 @@ extension InstagramViewController : UICollectionViewDataSource {
         cell.backgroundColor = UIColor.blackColor()
         return cell
         
-        // TODO: Pull images from array of data instead of array of images.
+        // TODO: Combine arrays into dictionary.
     }
     
 }
