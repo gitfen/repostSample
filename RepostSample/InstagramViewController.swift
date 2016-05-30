@@ -42,11 +42,6 @@ class InstagramViewController: UIViewController {
     }
     
     func getData() {
-//        if (Model.data != nil) {
-//            print(Model.data)
-//        } else {
-//            getData()
-//        }
         
         print(Model.data)
         instagramButton.hidden = false
@@ -107,15 +102,12 @@ class InstagramViewController: UIViewController {
         print("getInstagramImages called. User \(userId)")
         
         let accessToken = getAccessToken()
-        
-        print("https://api.instagram.com/v1/users/706215427/media/recent/?access_token=\(accessToken)")
     
         guard let requestURL = NSURL(string: "https://api.instagram.com/v1/users/706215427/media/recent/?access_token=\(accessToken)") else {
             print("no requestURL")
             return
         }
         
-        // let urlRequest = NSMutableURLRequest(URL: requestURL)
         let session = NSURLSession.sharedSession()
         let task = session.dataTaskWithURL(requestURL) {
             (data, response, error) -> Void in
@@ -175,6 +167,7 @@ class InstagramViewController: UIViewController {
                 return
             }
             
+            // TODO: Collect Images from data verse from Instagram 
             imageArray = [UIImage?](count: data.count, repeatedValue: nil)
             instagramImages = data
             dispatch_async(GlobalQueue.main, { () -> Void in
@@ -187,29 +180,26 @@ class InstagramViewController: UIViewController {
                 
                 dispatch_async(GlobalQueue.initiated) {
                     
-                    let info = InstagramImage(data: data as! [String : AnyObject], index: index)
-                    print(info.data["type"])
-                
-                    guard let type = data["type"] as? String else {
-                        print("Error: Type (Image or Video) not found")
+//                    let info = InstagramImage(data: data as! [String : AnyObject], index: index)
+//                
+//                    guard let type = data["type"] as? String else {
+//                        print("Error: Type (Image or Video) not found")
+//                        return
+//                    }
+                    
+                        
+                    guard let images = data["images"] as? [String: AnyObject],
+                    let standardResolution = images["standard_resolution"] as? [String: AnyObject],
+                    let imageURL = standardResolution["url"] as? String else {
+                            return
+                    }
+                    
+                    guard let url = NSURL(string: imageURL) else {
                         return
                     }
                     
-                    if type == "image" {
+                    self.displayImageFromURL(url, index: index)
                         
-                        guard let images = data["images"] as? [String: AnyObject],
-                        let standardResolution = images["standard_resolution"] as? [String: AnyObject],
-                        let imageURL = standardResolution["url"] as? String else {
-                                return
-                        }
-                        
-                        guard let url = NSURL(string: imageURL) else {
-                            return
-                        }
-                        
-                        self.displayImageFromURL(url, index: index)
-                        
-                    }
                 }
             }
             
@@ -236,7 +226,7 @@ class InstagramViewController: UIViewController {
                 return
             }
             
-            print("\(response) Image Returned")
+            print("Image Returned: \(index)")
             
             self.displayImageWithData(data, index: index)
             
@@ -253,19 +243,32 @@ class InstagramViewController: UIViewController {
         dispatch_async(GlobalQueue.main) {
             let image = UIImage(data: data)
             
-//            let xCoord = (index % 3) * 102
-//            let yCoord = ((index / 3) * 102) + 100
-//            
-//            let imageView = UIImageView(frame: CGRect(x: xCoord, y: yCoord, width: 100, height: 100))
-//            imageView.image = image
-//
-//            self.view.addSubview(imageView)
-            
             if (self.imageArray != nil) {
                 print("Image Updated: \(index)")
                 self.imageArray![index] = image
                 self.instagramCollectionView.reloadItemsAtIndexPaths([NSIndexPath(forItem: index, inSection: 0)])
             }
+        }
+        
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if segue.identifier == "showImage" {
+            
+            let indexPaths = self.instagramCollectionView.indexPathsForSelectedItems()
+            
+            guard let pathArray = indexPaths else {
+                return
+            }
+            
+            let indexPath = pathArray[0] as NSIndexPath
+            
+            let imageViewController = segue.destinationViewController as! ImageViewController
+            
+            imageViewController.imageData = instagramImages[indexPath.row]
+            
+            
         }
         
     }
@@ -283,7 +286,7 @@ extension InstagramViewController : UICollectionViewDataSource {
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("instagramCell", forIndexPath: indexPath) as! InstagramCollectionCell
-        //cell.cellLabel.text = instagramImages[indexPath.item] as? String
+        
         guard let array = imageArray else {
             return cell
         }
@@ -291,9 +294,11 @@ extension InstagramViewController : UICollectionViewDataSource {
         if let image = array[indexPath.item] {
             cell.cellImage.image = image
         }
-        //cell.cellImage = imageArray[indexPath.item] as? UIImage
+
         cell.backgroundColor = UIColor.blackColor()
         return cell
+        
+        // TODO: Pull images from array of data instead of array of images.
     }
     
 }
@@ -302,7 +307,7 @@ extension InstagramViewController : UICollectionViewDataSource {
 extension InstagramViewController : UICollectionViewDelegate {
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        instagramCollectionView.reloadItemsAtIndexPaths([indexPath])
+        self.performSegueWithIdentifier("showImage", sender: self)
     }
     
 }
@@ -315,7 +320,7 @@ extension InstagramViewController : UICollectionViewDelegateFlowLayout {
         let screenSize: CGRect = UIScreen.mainScreen().bounds
         
         let screenWidth = screenSize.width
-        let cellSize = (screenWidth - 10) / 3
+        let cellSize = (screenWidth - 2) / 3
         
         return CGSize(width: cellSize, height: cellSize)
     }
