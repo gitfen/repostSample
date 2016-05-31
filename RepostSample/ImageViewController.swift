@@ -18,7 +18,7 @@ class ImageViewController : UIViewController {
     
     @IBAction func printData(sender: AnyObject) {
         
-        print(imageData.videoViews)
+        print(imageData.json)
         
     }
     
