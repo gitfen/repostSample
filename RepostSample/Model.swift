@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftyJSON
+import UIKit
 
 class Model {
     
@@ -29,6 +30,7 @@ class Model {
 class InstagramImage {
     
     var json: JSON
+    var image: UIImage?
     
     init(json: JSON) {
         self.json = json
@@ -59,25 +61,61 @@ extension InstagramImage {
         return videoViews
     }
     
-    func getImageURL() -> String? {
+    func getImageURL() -> NSURL? {
         
         let images = json["images"]
         
         if let url = images["high_resolution"]["url"].string {
-            return url
+            return NSURL(string: url)
         }
         
         if let url = images["standard_resolution"]["url"].string {
-            return url
+            return NSURL(string: url)
         }
         
         if let url = images["low_resolution"]["url"].string {
-            return url
+            return NSURL(string: url)
         }
         
         return nil
         
     }
+    
+}
+
+extension InstagramImage: ImageGetter {
+    
+    func getImageWithURL(url: NSURL, completionHandler: () -> Void) {
+            
+        let imgSession = NSURLSession.sharedSession()
+        let task = imgSession.dataTaskWithURL(url) { (data, response, error) -> Void in
+            guard let data = data else {
+                return
+            }
+            
+            print("Image Data Returned")
+            
+            guard let imageWithData = UIImage(data: data) else {
+                return
+            }
+            
+            self.image = imageWithData
+            
+            completionHandler()
+            
+        }
+        
+        task.resume()
+        
+    }
+        
+    
+    
+}
+
+protocol ImageGetter {
+    
+    func getImageWithURL(url: NSURL, completionHandler: () -> Void)
     
 }
 

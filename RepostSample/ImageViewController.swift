@@ -16,9 +16,29 @@ class ImageViewController : UIViewController {
     
     var imageData: InstagramImage!
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        displayImage()
+    }
+    
     @IBAction func printData(sender: AnyObject) {
         
-        print(imageData.json)
+    }
+    
+    func displayImage() {
+        guard let url = imageData.getImageURL() else {
+            return
+        }
+        
+        dispatch_async(GlobalQueue.interactive) { () -> Void in
+            self.imageData.getImageWithURL(url) { () -> Void in
+                dispatch_async(GlobalQueue.main){ () -> Void in
+                    print(self.imageData.image)
+                    self.repostImage.image = self.imageData.image
+                }
+            }
+        }
         
     }
     
