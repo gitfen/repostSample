@@ -21,9 +21,14 @@ class InstagramViewController: UIViewController {
     @IBOutlet weak var instagramButton: UIButton!
     
     @IBOutlet weak var instagramCollectionView: UICollectionView!
+    @IBOutlet weak var searchBar: UITextField!
+    @IBOutlet weak var searchTableView: UITableView!
     
     var instagramImages: [InstagramImage?] = []
     var imageArray: [UIImage?]?
+    
+    var searchArray: [SearchData?] = []
+
     
 
     
@@ -38,6 +43,9 @@ class InstagramViewController: UIViewController {
         
         instagramButton.hidden = true
         instagramCollectionView.hidden = true
+        searchTableView.hidden = true
+        
+        setUpSearchBar()
         
         getData()
         
@@ -64,6 +72,44 @@ class InstagramViewController: UIViewController {
     
     
     // **************************************************************************************
+    //   MARK: UI Setup Methods
+    // **************************************************************************************
+    
+    func setUpSearchBar() {
+        
+        // Search Bar Set Up
+        
+        searchBar.delegate = self
+        searchBar.borderStyle = UITextBorderStyle.None
+        searchBar.placeholder = "Search"
+        
+        
+        // There may be a better way to do this
+        NSNotificationCenter.defaultCenter().addObserverForName(UITextFieldTextDidChangeNotification, object: searchBar, queue: nil) { (UITextFieldTextDidChangeNotification) in
+            
+            guard let searchText = self.searchBar.text else {
+                return
+            }
+            
+            dispatch_async(GlobalQueue.interactive, {
+                self.searchFor(searchText)
+            })
+            
+            print(self.searchArray.count)
+            
+        }
+        
+        
+        // Table View Set Up
+        
+        searchTableView.delegate = self
+        searchTableView.dataSource = self
+
+    }
+    
+    
+    
+    // **************************************************************************************
     //   MARK: Button Methods
     // **************************************************************************************
     
@@ -84,7 +130,7 @@ class InstagramViewController: UIViewController {
     @IBAction func showImages(sender: UIButton) {
         
         dispatch_async(GlobalQueue.interactive) { () -> Void in
-            self.getInstagramImages("123")
+            self.getInstagramImages("abrilliantlie")
             self.instagramButton.hidden = true
         }
         instagramCollectionView.hidden = false
@@ -98,13 +144,13 @@ class InstagramViewController: UIViewController {
     //   MARK: Get Images Methods
     // **************************************************************************************
     
-    func getInstagramImages(userId: String) {
+    func getInstagramImages(hashtag: String) {
         
-        print("getInstagramImages called. User \(userId)")
+        print("getInstagramImages called. User \(hashtag)")
         
         let accessToken = getAccessToken()
     
-        guard let requestURL = NSURL(string: "https://api.instagram.com/v1/users/706215427/media/recent/?access_token=\(accessToken)") else {
+        guard let requestURL = NSURL(string: "https://api.instagram.com/v1/tags/\(hashtag)/media/recent/?access_token=\(accessToken)") else {
             print("no requestURL")
             return
         }
@@ -162,6 +208,12 @@ class InstagramViewController: UIViewController {
             
         let json = JSON(data: data)
         let data = json["data"]
+        
+        if data.count == 0 {
+            // TODO: Add screen letting user know there is no data and to try seraching for something.
+            print("No Data")
+            return
+        }
         
         // TODO: Collect Images from data verse from Instagram 
         imageArray = [UIImage?](count: data.count, repeatedValue: nil)
@@ -319,10 +371,168 @@ extension InstagramViewController : UICollectionViewDelegateFlowLayout {
         let screenSize: CGRect = UIScreen.mainScreen().bounds
         
         let screenWidth = screenSize.width
-        let cellSize = (screenWidth - 2) / 3
+        let cellSize = (screenWidth - 10) / 3
         
         return CGSize(width: cellSize, height: cellSize)
     }
     
     
 }
+
+
+
+
+
+// ******************************************************************************************
+//   MARK: Search Field Extensions
+// ******************************************************************************************
+
+// Search Functions
+extension InstagramViewController {
+    
+    func searchFor(string: String) {
+        
+        let accessToken = getAccessToken()
+        
+        guard let requestURL = NSURL(string: "https://api.instagram.com/v1/tags/search?q=\(string)&access_token=\(accessToken)") else {
+            print("no requestURL")
+            return
+        }
+        
+        let session = NSURLSession.sharedSession()
+        let task = session.dataTaskWithURL(requestURL) {
+            (data, response, error) in
+            
+            guard let httpResponse = response as? NSHTTPURLResponse else {
+                print("Error: No Response from server")
+                return
+            }
+            
+            if httpResponse.statusCode == 200 {
+                guard let data = data else {
+                    return
+                }
+                
+                let json = JSON(data: data)
+                let jsonData = json["data"]
+                self.searchArray = [SearchData?](count: jsonData.count, repeatedValue: nil)
+                
+                for (index, data) in jsonData {
+                    
+                    guard let index = Int(index) else { return }
+                    
+                    self.searchArray[index] = SearchData(name: data["name"].stringValue, mediaCount: data["media_count"].intValue)
+                    
+                }
+                
+                dispatch_async(GlobalQueue.main, {
+                    print("reload")
+                    self.searchTableView.reloadData()
+                })
+                
+            }
+            
+        }
+        task.resume()
+    }
+    
+}
+
+
+
+extension InstagramViewController : UITextFieldDelegate {
+    
+    func textFieldDidBeginEditing(textField: UITextField) {
+        if textField == searchBar {
+            searchTableView.hidden = false
+        }
+    }
+    
+    func textFieldDidEndEditing(textField: UITextField) {
+        if textField == searchBar {
+            searchTableView.hidden = true
+        }
+    }
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        
+        guard let hashtag = textField.text else {
+            print("No Data in search field")
+            return true
+        }
+        
+        let trimmedHashtag = hashtag.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        
+        print(trimmedHashtag)
+        
+        getInstagramImages(trimmedHashtag)
+        
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        
+        if (textField.text == " ") {
+            textField.text = ""
+            return true
+        }
+        
+        return true
+    }
+    
+}
+
+
+
+
+extension InstagramViewController : UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
+        let searchCell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier("serachCell")! as UITableViewCell
+        
+        guard let cellData = searchArray[indexPath.item] else {
+            print("No Data Available for Search Cell")
+            return UITableViewCell()
+        }
+        
+        if let name = cellData.name {
+            searchCell.textLabel?.text = name
+        } else {
+            searchCell.textLabel?.text = ""
+        }
+        
+        if let mediaCount = cellData.mediaCount {
+            searchCell.detailTextLabel?.text = String(mediaCount)
+        } else {
+            searchCell.detailTextLabel?.text = ""
+        }
+        
+        return searchCell
+        
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        return searchArray.count
+    }
+    
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

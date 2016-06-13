@@ -120,3 +120,17 @@ protocol ImageGetter {
 }
 
 
+
+class SearchData {
+    
+    var name: String!
+    var mediaCount: Int!
+    
+    init(name: String, mediaCount: Int) {
+        self.name = name
+        self.mediaCount = mediaCount
+    }
+    
+}
+
+

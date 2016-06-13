@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -146,17 +146,62 @@
                                     <outlet property="delegate" destination="z6C-Cs-mBA" id="95N-Vn-28y"/>
                                 </connections>
                             </collectionView>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="0P7-mN-ERp">
+                                <rect key="frame" x="-25" y="-30" width="97" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="0XZ-vF-wPH">
+                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="serachCell" textLabel="Mkd-A0-H4A" detailTextLabel="xag-M6-ZRI" style="IBUITableViewCellStyleValue1" id="ehp-jB-RPg">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ehp-jB-RPg" id="wfq-cw-sRy">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Mkd-A0-H4A">
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <variation key="heightClass=regular">
+                                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    </variation>
+                                                </label>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Detail" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="xag-M6-ZRI">
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <variation key="heightClass=regular">
+                                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    </variation>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="Vx5-dO-MyV" firstAttribute="top" secondItem="XgE-kz-SvQ" secondAttribute="bottom" id="00r-fr-ShW"/>
+                            <constraint firstItem="xTX-O6-jQu" firstAttribute="top" secondItem="0XZ-vF-wPH" secondAttribute="bottom" id="0bn-Zq-OfZ"/>
                             <constraint firstAttribute="trailingMargin" secondItem="lSq-V8-aUH" secondAttribute="trailing" constant="-20" id="6ND-Yo-ekD"/>
-                            <constraint firstItem="lSq-V8-aUH" firstAttribute="top" secondItem="Vx5-dO-MyV" secondAttribute="bottom" id="NBd-ph-ff8"/>
+                            <constraint firstItem="0P7-mN-ERp" firstAttribute="top" secondItem="Vx5-dO-MyV" secondAttribute="bottom" constant="15" id="GNE-Vs-rL2"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="0P7-mN-ERp" secondAttribute="trailing" id="LjY-Jr-V1O"/>
+                            <constraint firstItem="lSq-V8-aUH" firstAttribute="top" secondItem="0P7-mN-ERp" secondAttribute="bottom" constant="15" id="MUW-tf-pl6"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="0P7-mN-ERp" secondAttribute="leading" id="NbL-bZ-S0E"/>
                             <constraint firstItem="Vx5-dO-MyV" firstAttribute="leading" secondItem="QLe-Ye-sQO" secondAttribute="leadingMargin" constant="-20" id="Rdd-Kh-mEh"/>
+                            <constraint firstItem="0XZ-vF-wPH" firstAttribute="leading" secondItem="QLe-Ye-sQO" secondAttribute="leadingMargin" constant="-20" id="Udc-Ct-0at"/>
                             <constraint firstItem="xTX-O6-jQu" firstAttribute="top" secondItem="lSq-V8-aUH" secondAttribute="bottom" id="WyU-9M-e6b"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="0XZ-vF-wPH" secondAttribute="trailing" constant="-20" id="Zet-Mt-HGS"/>
                             <constraint firstItem="lSq-V8-aUH" firstAttribute="leading" secondItem="QLe-Ye-sQO" secondAttribute="leadingMargin" constant="-20" id="dBK-Ux-Qfn"/>
                             <constraint firstItem="UGD-8M-bmb" firstAttribute="centerX" secondItem="QLe-Ye-sQO" secondAttribute="centerX" id="fik-sn-Ppz"/>
                             <constraint firstItem="UGD-8M-bmb" firstAttribute="centerY" secondItem="QLe-Ye-sQO" secondAttribute="centerY" id="gyo-Kz-zRv"/>
+                            <constraint firstItem="0XZ-vF-wPH" firstAttribute="top" secondItem="0P7-mN-ERp" secondAttribute="bottom" constant="15" id="r6H-OP-dfR"/>
                             <constraint firstItem="ZFd-t9-NQl" firstAttribute="centerY" secondItem="QLe-Ye-sQO" secondAttribute="centerY" id="s6Y-UV-OBD"/>
                             <constraint firstItem="ZFd-t9-NQl" firstAttribute="centerX" secondItem="QLe-Ye-sQO" secondAttribute="centerX" id="uUe-B2-q8t"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Vx5-dO-MyV" secondAttribute="trailing" constant="-20" id="yCg-6y-6cq"/>
@@ -165,14 +210,23 @@
                             <mask key="subviews">
                                 <exclude reference="Vx5-dO-MyV"/>
                                 <exclude reference="lSq-V8-aUH"/>
+                                <exclude reference="0P7-mN-ERp"/>
+                                <exclude reference="0XZ-vF-wPH"/>
                             </mask>
                             <mask key="constraints">
+                                <exclude reference="GNE-Vs-rL2"/>
+                                <exclude reference="LjY-Jr-V1O"/>
+                                <exclude reference="NbL-bZ-S0E"/>
                                 <exclude reference="00r-fr-ShW"/>
                                 <exclude reference="Rdd-Kh-mEh"/>
                                 <exclude reference="yCg-6y-6cq"/>
+                                <exclude reference="Udc-Ct-0at"/>
+                                <exclude reference="Zet-Mt-HGS"/>
+                                <exclude reference="r6H-OP-dfR"/>
                                 <exclude reference="6ND-Yo-ekD"/>
-                                <exclude reference="NBd-ph-ff8"/>
+                                <exclude reference="MUW-tf-pl6"/>
                                 <exclude reference="dBK-Ux-Qfn"/>
+                                <exclude reference="0bn-Zq-OfZ"/>
                                 <exclude reference="WyU-9M-e6b"/>
                             </mask>
                         </variation>
@@ -180,14 +234,23 @@
                             <mask key="subviews">
                                 <include reference="Vx5-dO-MyV"/>
                                 <include reference="lSq-V8-aUH"/>
+                                <include reference="0P7-mN-ERp"/>
+                                <include reference="0XZ-vF-wPH"/>
                             </mask>
                             <mask key="constraints">
+                                <include reference="GNE-Vs-rL2"/>
+                                <include reference="LjY-Jr-V1O"/>
+                                <include reference="NbL-bZ-S0E"/>
                                 <include reference="00r-fr-ShW"/>
                                 <include reference="Rdd-Kh-mEh"/>
                                 <include reference="yCg-6y-6cq"/>
+                                <include reference="Udc-Ct-0at"/>
+                                <include reference="Zet-Mt-HGS"/>
+                                <include reference="r6H-OP-dfR"/>
                                 <include reference="6ND-Yo-ekD"/>
-                                <include reference="NBd-ph-ff8"/>
+                                <include reference="MUW-tf-pl6"/>
                                 <include reference="dBK-Ux-Qfn"/>
+                                <include reference="0bn-Zq-OfZ"/>
                                 <include reference="WyU-9M-e6b"/>
                             </mask>
                         </variation>
@@ -196,6 +259,8 @@
                         <outlet property="instagramButton" destination="UGD-8M-bmb" id="5dd-Tx-fK9"/>
                         <outlet property="instagramCollectionView" destination="lSq-V8-aUH" id="pMw-vE-LgA"/>
                         <outlet property="printButton" destination="ZFd-t9-NQl" id="SX3-27-yd0"/>
+                        <outlet property="searchBar" destination="0P7-mN-ERp" id="JlU-Oo-LNC"/>
+                        <outlet property="searchTableView" destination="0XZ-vF-wPH" id="JUx-2U-19p"/>
                         <segue destination="TKY-5l-PDR" kind="show" identifier="showImage" id="WSV-Xo-Atk"/>
                     </connections>
                 </viewController>
