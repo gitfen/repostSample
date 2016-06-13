@@ -473,6 +473,7 @@ extension InstagramViewController : UITextFieldDelegate {
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         
+        // Protects against spaces at front of text.
         if (textField.text == " ") {
             textField.text = ""
             return true
@@ -486,7 +487,7 @@ extension InstagramViewController : UITextFieldDelegate {
 
 
 
-extension InstagramViewController : UITableViewDelegate, UITableViewDataSource {
+extension InstagramViewController : UITableViewDataSource {
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
@@ -503,6 +504,7 @@ extension InstagramViewController : UITableViewDelegate, UITableViewDataSource {
             searchCell.textLabel?.text = ""
         }
         
+        // TODO: Format Number for Display
         if let mediaCount = cellData.mediaCount {
             searchCell.detailTextLabel?.text = String(mediaCount)
         } else {
@@ -518,6 +520,25 @@ extension InstagramViewController : UITableViewDelegate, UITableViewDataSource {
         return searchArray.count
     }
     
+}
+
+
+
+extension InstagramViewController : UITableViewDelegate {
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        guard let data = searchArray[indexPath.item] else {
+            return
+        }
+        
+        print(data.name)
+        searchBar.resignFirstResponder()
+        searchBar.text = ""
+        searchTableView.hidden = true
+        
+        getInstagramImages(data.name)
+        
+    }
     
 }
 
