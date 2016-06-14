@@ -133,4 +133,29 @@ class SearchData {
     
 }
 
+class UsersSearchData {
+    
+    var fullName: String!
+    var username: String!
+    var id: String!
+    var profilePictureURL: String!
+    var bio: String!
+    var website: String!
+    
+    init (jsonData: JSON) {
+        self.username = jsonData["username"].string
+        self.fullName = jsonData["full_name"].string
+        self.id = jsonData["id"].string
+        self.profilePictureURL = jsonData["profile_picture"].string
+        self.bio = jsonData["bio"].string
+        self.website = jsonData["website"].string
+    }
+    
+}
+
+enum SearchTypes {
+    case Hashtag
+    case Users    
+}
+
 

@@ -24,10 +24,11 @@ class InstagramViewController: UIViewController {
     @IBOutlet weak var searchBar: UITextField!
     @IBOutlet weak var searchTableView: UITableView!
     
-    var instagramImages: [InstagramImage?] = []
-    var imageArray: [UIImage?]?
+    var instagramImages: [InstagramImage?]  = []
+    var imageArray:      [UIImage?]?
     
-    var searchArray: [SearchData?] = []
+    var searchArray:     [SearchData?]      = []
+    var usersSearch:     [UsersSearchData?] = []
 
     
 
@@ -92,7 +93,8 @@ class InstagramViewController: UIViewController {
             }
             
             dispatch_async(GlobalQueue.interactive, {
-                self.searchFor(searchText)
+                self.searchFor(SearchTypes.Hashtag, query: searchText)
+                self.searchFor(SearchTypes.Users, query: searchText)
             })
             
             print(self.searchArray.count)
@@ -390,12 +392,18 @@ extension InstagramViewController : UICollectionViewDelegateFlowLayout {
 // Search Functions
 extension InstagramViewController {
     
-    func searchFor(string: String) {
+    func searchFor(type: SearchTypes, query: String) {
         
         let accessToken = getAccessToken()
+        var url: String
         
-        guard let requestURL = NSURL(string: "https://api.instagram.com/v1/tags/search?q=\(string)&access_token=\(accessToken)") else {
-            print("no requestURL")
+        switch type {
+            case .Hashtag: url = "https://api.instagram.com/v1/tags/search?q=\(query)&access_token=\(accessToken)"
+            case .Users: url = "https://api.instagram.com/v1/users/search?q=\(query)&access_token=\(accessToken)"
+        }
+        
+        guard let requestURL = NSURL(string: url) else {
+            print("Error: No Request URL")
             return
         }
         
@@ -415,15 +423,36 @@ extension InstagramViewController {
                 
                 let json = JSON(data: data)
                 let jsonData = json["data"]
-                self.searchArray = [SearchData?](count: jsonData.count, repeatedValue: nil)
                 
-                for (index, data) in jsonData {
+                switch type {
+                    case .Hashtag:
+                        self.searchArray = [SearchData?](count: jsonData.count, repeatedValue: nil)
+                        
+                        for (index, data) in jsonData {
+                            
+                            guard let index = Int(index) else { return }
+                            
+                            self.searchArray[index] = SearchData(name: data["name"].stringValue, mediaCount: data["media_count"].intValue)
+                            print("Hashtag: \(self.searchArray[index]?.name)")
+                            
+                        }
+                        
+                        
+                    case .Users:
+                        self.usersSearch = [UsersSearchData?](count: jsonData.count, repeatedValue: nil)
                     
-                    guard let index = Int(index) else { return }
+                        for (index, data) in jsonData {
+                            
+                            guard let index = Int(index) else { return }
+                            
+                            self.usersSearch[index] = UsersSearchData(jsonData: data)
+                            print("Username: \(self.usersSearch[index]?.username)")
+                            
+                        }
                     
-                    self.searchArray[index] = SearchData(name: data["name"].stringValue, mediaCount: data["media_count"].intValue)
                     
                 }
+                
                 
                 dispatch_async(GlobalQueue.main, {
                     print("reload")
