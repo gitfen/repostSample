@@ -27,6 +27,7 @@ class InstagramViewController: UIViewController {
     var instagramImages: [InstagramImage?]  = []
     var imageArray:      [UIImage?]?
     
+    var searchSection:   [SearchTypes?]     = [nil]
     var searchArray:     [SearchData?]      = []
     var usersSearch:     [UsersSearchData?] = []
 
@@ -93,6 +94,10 @@ class InstagramViewController: UIViewController {
             }
             
             dispatch_async(GlobalQueue.interactive, {
+                
+                self.searchArray = []
+                self.usersSearch = []
+                
                 self.searchFor(SearchTypes.Hashtag, query: searchText)
                 self.searchFor(SearchTypes.Users, query: searchText)
             })
@@ -426,6 +431,7 @@ extension InstagramViewController {
                 
                 switch type {
                     case .Hashtag:
+                        
                         self.searchArray = [SearchData?](count: jsonData.count, repeatedValue: nil)
                         
                         for (index, data) in jsonData {
@@ -456,6 +462,14 @@ extension InstagramViewController {
                 
                 dispatch_async(GlobalQueue.main, {
                     print("reload")
+                    if self.usersSearch.count > 0 && self.searchArray.count > 0 {
+                        self.searchSection = [SearchTypes.Users, SearchTypes.Hashtag]
+                    } else {
+                        self.searchSection = [nil]
+                    }
+                    
+                    print(self.searchSection)
+                    
                     self.searchTableView.reloadData()
                 })
                 
@@ -522,33 +536,107 @@ extension InstagramViewController : UITableViewDataSource {
         
         let searchCell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier("serachCell")! as UITableViewCell
         
-        guard let cellData = searchArray[indexPath.item] else {
-            print("No Data Available for Search Cell")
-            return UITableViewCell()
+        var type: SearchTypes
+        
+        print("Counts:")
+        print("SearchSection: \(searchSection.count)")
+        print("HashArray: \(searchArray.count)")
+        print("UserArray: \(usersSearch.count)")
+        
+        if searchSection[0] != nil {
+            type = searchSection[indexPath.section]!
+        } else if searchArray.count > 0 {
+            type = SearchTypes.Hashtag
+        } else if usersSearch.count > 0 {
+            type = SearchTypes.Users
+        } else {
+            return searchCell
         }
         
-        if let name = cellData.name {
-            searchCell.textLabel?.text = name
-        } else {
-            searchCell.textLabel?.text = ""
+        if type == SearchTypes.Users {
+            
+            guard let cellData = usersSearch[indexPath.item] else {
+                print("No Data Available for Search Cell")
+                return searchCell
+            }
+            
+            searchCell.textLabel?.text = cellData.username
+            searchCell.detailTextLabel?.text = cellData.fullName
+            
         }
         
-        // TODO: Format Number for Display
-        if let mediaCount = cellData.mediaCount {
-            searchCell.detailTextLabel?.text = String(mediaCount)
-        } else {
-            searchCell.detailTextLabel?.text = ""
+        if type == SearchTypes.Hashtag {
+            
+            guard let cellData = searchArray[indexPath.item] else {
+                print("No Data Available for Search Cell")
+                return searchCell
+            }
+            
+            if let name = cellData.name {
+                searchCell.textLabel?.text = name
+            } else {
+                searchCell.textLabel?.text = ""
+            }
+            
+            // TODO: Format Number for Display
+            if let mediaCount = cellData.mediaCount {
+                searchCell.detailTextLabel?.text = String(mediaCount)
+            } else {
+                searchCell.detailTextLabel?.text = ""
+            }
+        
         }
         
         return searchCell
         
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        return searchArray.count
+    
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        if searchSection.count > 0 {
+            return searchSection.count
+        } else {
+            return 1
+        }
     }
     
+    
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        
+        if searchSection[0] != nil {
+            return searchSection[section]?.rawValue
+        }
+
+        return nil
+        
+    }
+    
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        if searchSection[0] != nil {
+            if section == 0 {
+                if usersSearch.count > 3 {
+                    return 3
+                } else {
+                    return usersSearch.count
+                }
+            }
+            
+            if section == 1 {
+                return searchArray.count
+            }
+        } else if searchArray.count > 0 {
+            return searchArray.count
+        } else if usersSearch.count > 0 {
+            return usersSearch.count
+        }
+        
+        // Default
+        return 0
+        
+    }
+
 }
 
 

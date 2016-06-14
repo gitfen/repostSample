@@ -153,9 +153,9 @@ class UsersSearchData {
     
 }
 
-enum SearchTypes {
-    case Hashtag
-    case Users    
+enum SearchTypes: String {
+    case Hashtag = "Hashtags"
+    case Users = "People"
 }
 
 
