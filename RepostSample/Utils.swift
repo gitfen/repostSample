@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 struct GlobalQueue {
     static var main: dispatch_queue_t {
@@ -32,4 +33,10 @@ struct GlobalQueue {
     static var defaultQueue: dispatch_queue_t {
         return dispatch_get_global_queue(Int(QOS_CLASS_DEFAULT.rawValue), 0)
     }
+}
+
+class InstagramSearchCell : UITableViewCell {
+    
+    var searchType: SearchTypes?
+    
 }

@@ -534,7 +534,7 @@ extension InstagramViewController : UITableViewDataSource {
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        let searchCell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier("serachCell")! as UITableViewCell
+        let searchCell: InstagramSearchCell = tableView.dequeueReusableCellWithIdentifier("serachCell")! as! InstagramSearchCell
         
         var type: SearchTypes
         
@@ -586,6 +586,8 @@ extension InstagramViewController : UITableViewDataSource {
             }
         
         }
+        
+        searchCell.searchType = type
         
         return searchCell
         
@@ -653,7 +655,19 @@ extension InstagramViewController : UITableViewDelegate {
         searchBar.text = ""
         searchTableView.hidden = true
         
-        getInstagramImages(data.name)
+        let cell = tableView.cellForRowAtIndexPath(indexPath) as! InstagramSearchCell
+        print("Search Type: \(cell.searchType)")
+        
+        guard let searchType = cell.searchType else {
+            return
+        }
+        
+        switch searchType {
+        case .Hashtag:
+            getInstagramImages(data.name)
+        case .Users:
+            print("Search For Users")
+        }
         
     }
     
