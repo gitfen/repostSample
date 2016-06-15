@@ -22,6 +22,7 @@ class ImageViewController : UIViewController {
         displayImage()
     }
     
+    
     @IBAction func printData(sender: AnyObject) {
         
     }

@@ -646,11 +646,7 @@ extension InstagramViewController : UITableViewDataSource {
 extension InstagramViewController : UITableViewDelegate {
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        guard let data = searchArray[indexPath.item] else {
-            return
-        }
         
-        print(data.name)
         searchBar.resignFirstResponder()
         searchBar.text = ""
         searchTableView.hidden = true
@@ -659,6 +655,10 @@ extension InstagramViewController : UITableViewDelegate {
         print("Search Type: \(cell.searchType)")
         
         guard let searchType = cell.searchType else {
+            return
+        }
+        
+        guard let data = searchArray[indexPath.item] else {
             return
         }
         

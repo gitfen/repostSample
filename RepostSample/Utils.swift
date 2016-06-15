@@ -35,6 +35,10 @@ struct GlobalQueue {
     }
 }
 
+enum StoryboardNames: String {
+    case NavigationController = "NavigationController"
+}
+
 class InstagramSearchCell : UITableViewCell {
     
     var searchType: SearchTypes?

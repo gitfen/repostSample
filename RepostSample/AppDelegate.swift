@@ -64,7 +64,7 @@ extension AppDelegate {
             OAuthSwift.handleOpenURL(url)
             
             let mainStoryboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            let instagramViewController: UIViewController = mainStoryboard.instantiateViewControllerWithIdentifier("InstagramViewController") 
+            let instagramViewController: UIViewController = mainStoryboard.instantiateViewControllerWithIdentifier(StoryboardNames.NavigationController.rawValue)
             window = UIWindow(frame: UIScreen.mainScreen().bounds)
             window?.rootViewController = instagramViewController
             window?.makeKeyAndVisible()
