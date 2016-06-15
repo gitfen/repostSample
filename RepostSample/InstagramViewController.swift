@@ -137,7 +137,7 @@ class InstagramViewController: UIViewController {
     @IBAction func showImages(sender: UIButton) {
         
         dispatch_async(GlobalQueue.interactive) { () -> Void in
-            self.getInstagramImages("abrilliantlie")
+            self.getInstagramImages(using: SearchTypes.Hashtag, query: "abrilliantlie")
             self.instagramButton.hidden = true
         }
         instagramCollectionView.hidden = false
@@ -151,16 +151,26 @@ class InstagramViewController: UIViewController {
     //   MARK: Get Images Methods
     // **************************************************************************************
     
-    func getInstagramImages(hashtag: String) {
+    func getInstagramImages(using searchType: SearchTypes, query: String) {
         
-        print("getInstagramImages called. User \(hashtag)")
+        print("getInstagramImages called. URL: \(query)")
         
         let accessToken = getAccessToken()
-    
-        guard let requestURL = NSURL(string: "https://api.instagram.com/v1/tags/\(hashtag)/media/recent/?access_token=\(accessToken)") else {
+        var urlInsert: String
+        
+        switch searchType {
+        case .Hashtag:
+            urlInsert = "tags/\(query)"
+        case .Users:
+            urlInsert = "users/\(query)"
+        }
+        
+        guard let requestURL = NSURL(string: "https://api.instagram.com/v1/\(urlInsert)/media/recent/?access_token=\(accessToken)") else {
             print("no requestURL")
             return
         }
+        
+        print("Request URL: \(requestURL)")
         
         let session = NSURLSession.sharedSession()
         let task = session.dataTaskWithURL(requestURL) {
@@ -508,7 +518,8 @@ extension InstagramViewController : UITextFieldDelegate {
         
         print(trimmedHashtag)
         
-        getInstagramImages(trimmedHashtag)
+        // TODO: decided the top value and search that.
+        getInstagramImages(using: SearchTypes.Hashtag, query: trimmedHashtag)
         
         textField.resignFirstResponder()
         return true
@@ -658,15 +669,19 @@ extension InstagramViewController : UITableViewDelegate {
             return
         }
         
-        guard let data = searchArray[indexPath.item] else {
-            return
-        }
-        
         switch searchType {
         case .Hashtag:
-            getInstagramImages(data.name)
+            guard let data = searchArray[indexPath.item] else {
+                return
+            }
+            
+            getInstagramImages(using: searchType, query: data.name)
         case .Users:
-            print("Search For Users")
+            guard let data = usersSearch[indexPath.item] else {
+                return
+            }
+            
+            getInstagramImages(using: searchType, query: data.id)
         }
         
     }
