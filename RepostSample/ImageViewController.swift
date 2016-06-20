@@ -14,12 +14,17 @@ class ImageViewController : UIViewController {
     
     @IBOutlet weak var repostImage: UIImageView!
     
-    var imageData: InstagramImage!
+    weak var imageData: InstagramImage!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         displayImage()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        print("Image View Did Close")
+        imageData.image = nil
     }
     
     
