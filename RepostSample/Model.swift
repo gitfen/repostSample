@@ -10,26 +10,21 @@ import Foundation
 import SwiftyJSON
 import UIKit
 
-class Model {
-    
-    static var data: AnyObject?
-    static var accessToken: String?
-    //static let sharedInstance = Model()
-    
-    func isEmpty() -> Bool {
-        if (Model.data != nil) {
-            return true
-        } else {
-            return false
-        }
-    }
-    
-    
+class SearchViewImages {
+
+    static let sharedInstance = SearchViewImages()
+
+    var images: [InstagramImage?] = []
+
 }
 
 class InstagramImage {
     
-    var json: JSON
+    var json: JSON {
+        didSet {
+            print("JSON Set")
+        }
+    }
     var image: UIImage?
     
     init(json: JSON) {
@@ -89,13 +84,21 @@ extension InstagramImage: ImageGetter {
             
         let imgSession = NSURLSession.sharedSession()
         let task = imgSession.dataTaskWithURL(url) { (data, response, error) -> Void in
-            guard let data = data else {
+            guard error == nil else {
+                return
+            }
+
+            guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 || statusCode <= 299 else {
+                return
+            }
+
+            guard let image = data else {
                 return
             }
             
             print("Image Data Returned")
             
-            guard let imageWithData = UIImage(data: data) else {
+            guard let imageWithData = UIImage(data: image) else {
                 return
             }
             
@@ -158,4 +161,10 @@ enum SearchTypes: String {
     case Users = "People"
 }
 
+
+struct StoryboardNames {
+    static let navigationController = "NavigationController"
+    static let instagramViewController = "InstagramViewController"
+    static let imageViewController = "ImageViewController"
+}
 

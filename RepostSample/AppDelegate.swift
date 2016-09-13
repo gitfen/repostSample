@@ -14,6 +14,8 @@ import OAuthSwift
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
   var window: UIWindow?
+  var oauth: OAuth2Swift?
+ 
 
 
   func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
@@ -63,12 +65,12 @@ extension AppDelegate {
         if (url.host == "oauth-callback") {
             OAuthSwift.handleOpenURL(url)
             
-            let mainStoryboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            let instagramViewController: UIViewController = mainStoryboard.instantiateViewControllerWithIdentifier(StoryboardNames.NavigationController.rawValue)
-            window = UIWindow(frame: UIScreen.mainScreen().bounds)
-            window?.rootViewController = instagramViewController
-            window?.makeKeyAndVisible()
-            
+//            let mainStoryboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+//            let instagramViewController: UIViewController = mainStoryboard.instantiateViewControllerWithIdentifier(StoryboardNames.navigationController)
+//            window = UIWindow(frame: UIScreen.mainScreen().bounds)
+//            window?.rootViewController = instagramViewController
+//            window?.makeKeyAndVisible()
+
         } else {
             OAuthSwift.handleOpenURL(url)
         }

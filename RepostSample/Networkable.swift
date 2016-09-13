@@ -51,6 +51,8 @@ extension Networkable {
                 return
             }
 
+            // let jsonData = self.parseJSONData(data)
+
             completionHandler(result: data, error: nil)
 
         }
@@ -63,13 +65,10 @@ extension Networkable {
     /// Parse returned data into readable JSON.
     func parseJSONData(data: NSData) -> AnyObject? {
 
-        // Delete the first 5 characters in the data. (Udacity Specific Thing)
-        let newData = data.subdataWithRange(NSMakeRange(14, data.length - 15))
-
         // Parse data into JSON
         var jsonData: AnyObject!
         do {
-            jsonData = try NSJSONSerialization.JSONObjectWithData(newData, options: .AllowFragments)
+            jsonData = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
         } catch {
             print("Unable to deserialize JSON data")
             return nil

@@ -41,32 +41,45 @@ class InstagramViewController: UIViewController {
     
     override func viewDidLoad() {
         print("Instagram View Loaded")
-        //print(Model.data)
         
         instagramButton.hidden = true
-        instagramCollectionView.hidden = true
         searchTableView.hidden = true
         
         setUpSearchBar()
+
+        InstagramClient.sharedInstance.loadImagesOnLogin { (error) in
+            guard error == nil else {
+                self.displayOneButtonAlert("Alert", message: error)
+                print(error)
+                return
+            }
+
+            print(SearchViewImages.sharedInstance.images.count)
+
+            performOnMain({ 
+                self.instagramCollectionView.reloadData()
+                self.displayImagesFromURLs()
+            })
+
+        }
         
         getData()
         
     }
+
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+
+
+        print("ViewWillAppear")
+
+    }
     
     func getData() {
         
-        print(Model.data)
+        print(UserData.sharedInstance.json)
         instagramButton.hidden = false
         printButton.hidden = true
-        
-        
-        // TODO: Add KVO or Observe pattern to Model.
-
-//        dispatch_async(GlobalQueue.interactive) { () -> Void in
-//            print("STUFF")
-//            self.getInstagramImages("123")
-//        }
-
         
     }
     
@@ -126,7 +139,7 @@ class InstagramViewController: UIViewController {
         print(instagramImages)
         instagramCollectionView.reloadItemsAtIndexPaths([NSIndexPath(forItem: 2, inSection: 0)])
         
-        print(Model.data)
+        print(UserData.sharedInstance.json)
         
         printButton.hidden = true
         instagramButton.hidden = false
@@ -135,15 +148,24 @@ class InstagramViewController: UIViewController {
     
     
     @IBAction func showImages(sender: UIButton) {
-        
+        instagramCollectionView.reloadData()
+//        
+//        dispatch_async(GlobalQueue.interactive) { () -> Void in
+//            self.getInstagramImages(using: SearchTypes.Hashtag, query: "abrilliantlie")
+//            self.instagramButton.hidden = true
+//        }
+//        instagramCollectionView.hidden = false
+
+    }
+
+    func test() {
         dispatch_async(GlobalQueue.interactive) { () -> Void in
             self.getInstagramImages(using: SearchTypes.Hashtag, query: "abrilliantlie")
-            self.instagramButton.hidden = true
+            //self.instagramButton.hidden = true
         }
-        instagramCollectionView.hidden = false
-        
+        // instagramCollectionView.hidden = false
     }
-    
+
     
     
     
@@ -207,7 +229,7 @@ class InstagramViewController: UIViewController {
     /// Returns the Access Token for the current user from OAuth.
     func getAccessToken() -> String {
         
-        guard let token = Model.accessToken else {
+        guard let token = UserData.sharedInstance.accessToken else {
             print("Error: No Access Token Available")
             return "Error: No Access Token Available"
         }
@@ -250,44 +272,58 @@ class InstagramViewController: UIViewController {
                 }
                 
                 self.instagramImages[index] = InstagramImage(json: data)
-                
-                let imageURL = data["images"]["thumbnail"]["url"].stringValue
-                
-                guard let url = NSURL(string: imageURL) else {
-                    return
-                }
-                
-                self.displayImageFromURL(url, index: index)
                     
             }
         }
     }
+
+    func displayImagesFromURLs() {
+
+        for (index, image) in SearchViewImages.sharedInstance.images.enumerate() {
+
+            guard let image = image else {
+                return
+            }
+
+            guard let url = image.getImageURL() else {
+                return
+            }
+
+            image.getImageWithURL(url, completionHandler: {
+                performOnMain({ 
+                    self.instagramCollectionView.reloadData()
+                })
+            })
+
+        }
+
+    }
     
     
     /// Get Image Data From URL and call function to Display the image.
-    func displayImageFromURL(url: NSURL, index: Int) {
-        
-        print("Display Image From URL called. URL: \(url)")
-        
-        let request = NSURLRequest(URL: url)
-        let imgSession = NSURLSession.sharedSession()
-        let imgTask = imgSession.dataTaskWithRequest(request) {
-            (data, response, error) -> Void in
-            
-            guard let data = data else {
-                return
-            }
-            
-            print("Image Returned: \(index)")
-            
-            self.displayImageWithData(data, index: index)
-            
-        }
-        
-        imgTask.resume()
-        
-    }
-    
+//    func displayImageFromURL(url: NSURL, index: Int) {
+//        
+//        print("Display Image From URL called. URL: \(url)")
+//        
+//        let request = NSURLRequest(URL: url)
+//        let imgSession = NSURLSession.sharedSession()
+//        let imgTask = imgSession.dataTaskWithRequest(request) {
+//            (data, response, error) -> Void in
+//            
+//            guard let data = data else {
+//                return
+//            }
+//            
+//            print("Image Returned: \(index)")
+//            
+//            self.displayImageWithData(data, index: index)
+//            
+//        }
+//        
+//        imgTask.resume()
+//        
+//    }
+
     
     /// Display Images
     func displayImageWithData(data: NSData, index: Int) {
@@ -326,7 +362,7 @@ class InstagramViewController: UIViewController {
             
             let imageViewController = segue.destinationViewController as! ImageViewController
             
-            imageViewController.imageData = instagramImages[indexPath.row]
+            imageViewController.imageData = SearchViewImages.sharedInstance.images[indexPath.row]
             
         }
         
@@ -345,25 +381,19 @@ class InstagramViewController: UIViewController {
 extension InstagramViewController : UICollectionViewDataSource {
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if instagramImages.count > 0 {
-            return instagramImages.count
-        } else {
-            return 20
-        }
+
+        return SearchViewImages.sharedInstance.images.count
+
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("instagramCell", forIndexPath: indexPath) as! InstagramCollectionCell
-        
-        guard let array = imageArray else {
-            return cell
-        }
-        
-        if let image = array[indexPath.item] {
+
+        if let image = SearchViewImages.sharedInstance.images[indexPath.item]?.image {
             cell.cellImage.image = image
         }
 
-        cell.backgroundColor = UIColor.blackColor()
+        cell.backgroundColor = UIColor.whiteColor()
         return cell
         
         // TODO: Combine arrays into dictionary.
@@ -387,7 +417,7 @@ extension InstagramViewController : UICollectionViewDelegateFlowLayout {
         
         let screenSize: CGRect = UIScreen.mainScreen().bounds
         
-        let screenWidth = screenSize.width
+        let screenWidth = CGFloat(screenSize.width)
         let cellSize = (screenWidth - 10) / 3
         
         return CGSize(width: cellSize, height: cellSize)

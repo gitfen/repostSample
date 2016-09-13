@@ -8,6 +8,7 @@
 
 import UIKit
 import OAuthSwift
+import SwiftyJSON
 
 let services = Services()
 let DocumentDirectory = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
@@ -20,24 +21,26 @@ let Instagram =
 ]
 
 
-class ViewController: UIViewController {
+class LoginViewController: UIViewController {
+
+    var appDelegate: AppDelegate!
     
     
-    // *****************************
-    //   MARK: Instagram Methods
-    // *****************************
+    // ***********************************
+    //   MARK: Instagram Login Methods
+    // ***********************************
     
     func doAuthService(service: String) {
         
         guard var parameters = services[service] else {
-            showAlertView("Miss configuration", message: "\(service) not configured")
+            displayOneButtonAlert("Miss configuration", message: "\(service) not configured")
             return
         }
         
         if Services.parametersEmpty(parameters) {
             let message = "\(service) seems to have not been well configured. \nPlease fill consumer key and secret info into configuration file \(self.confPath)"
             print(message)
-            showAlertView("Miss configuration", message: message)
+            displayOneButtonAlert("Miss configuration", message: message)
         }
         
         parameters["name"] = service
@@ -50,37 +53,42 @@ class ViewController: UIViewController {
     }
     
     func instagramAuth(serviceParameter: [String: String]) {
-        let oauth = OAuth2Swift(
+        appDelegate.oauth = OAuth2Swift(
             consumerKey: serviceParameter["consumerKey"]!,
             consumerSecret: serviceParameter["consumerSecret"]!,
             authorizeUrl: "https://api.instagram.com/oauth/authorize",
             responseType: "token"
         )
+
+        guard let oauth = appDelegate.oauth else {
+            return
+        }
         
         let state: String = generateStateWithLength(20) as String
         oauth.authorize_url_handler = getURLHandler()
         oauth.authorizeWithCallbackURL(NSURL(string: "repostSample://oauth-callback/instagram")!, scope: "likes+comments+public_content", state: state, success: { (credential, response, parameters) -> Void in
-            self.testInstagram(oauth)
+            self.loginInstagram(self.appDelegate.oauth!)
             }, failure: { (error) -> Void in
-                print(error.localizedDescription)
+                self.displayOneButtonAlert("Alert", message: error.localizedDescription)
         })
     }
     
-    
-    // This is only a test.  You will need to use this info to log them in and view their information.
-    func testInstagram(oauth: OAuth2Swift) {
+
+    func loginInstagram(oauth: OAuth2Swift) {
         
-        let url: String = "https://api.instagram.com/v1/users/706215427/?access_token=\(oauth.client.credential.oauth_token)"
+        let url: String = "https://api.instagram.com/v1/users/self/?access_token=\(oauth.client.credential.oauth_token)"
         let parameters: Dictionary = [String: AnyObject]()
         oauth.client.get(url, parameters: parameters,
             success: {
                 (data, response) -> Void in
-                let jsonDict: AnyObject! = try? NSJSONSerialization.JSONObjectWithData(data, options: [])
-                // self.userInfo = Model(name: "Instagram2", data: jsonDict)
-                print(Model.data)
-                Model.data = jsonDict
-                Model.accessToken = oauth.client.credential.oauth_token
-                print(jsonDict)
+                let jsonDict = JSON(data: data)
+                UserData.sharedInstance.json = jsonDict
+                UserData.sharedInstance.accessToken = oauth.client.credential.oauth_token
+
+                let mainStoryboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+                let instagramViewController: UIViewController = mainStoryboard.instantiateViewControllerWithIdentifier(StoryboardNames.navigationController)
+                self.presentViewController(instagramViewController, animated: true, completion: nil)
+
             }, failure: { (error) -> Void in
                 print(error)
         })
@@ -96,17 +104,16 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print("loaded")
+        print("Login View Loaded")
+
+        appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         
         //Load config from files
         initConfig()
         
         getURLHandler()
-        
-        let label = UILabel()
-        label.text = "THINGS"
-        label.textAlignment = .Center
-        view.addSubview(label)
+
+                doAuthService("Instagram")
         
     }
     

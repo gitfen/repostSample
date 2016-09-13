@@ -6,6 +6,9 @@
 //  Copyright © 2016 Jason Lemrond. All rights reserved.
 //
 
+
+// Provided by the OAuth Framework.
+
 import Foundation
 
 // Class which contains services parameters like consumer key and secret
